@@ -9,11 +9,8 @@ from impuls.resource import TimeLimitedResource
 from impuls.tasks import GenerateTripHeadsign, SaveGTFS
 
 from ..apikey import get_apikey
-from .load_agencies import LoadAgencies
 from .load_data_version import LoadDataVersion
-from .load_routes import LoadRoutes
 from .load_schedules import LoadSchedules
-from .load_stops import LoadStops
 
 RESOURCE_TIME_LIMIT = timedelta(days=1)
 
@@ -69,16 +66,10 @@ class PolishTrainsGTFS(App):
             options=options,
             resources={
                 "data_version.json": self.endpoint("data-version", apikey),
-                "carriers.json": self.endpoint("dictionaries/carriers", apikey),
-                "categories.json": self.endpoint("dictionaries/commercial-categories", apikey),
-                "stations.json": self.endpoint("dictionaries/stations", apikey),
                 "schedules.json": self.endpoint("schedules/shortened", apikey),
             },
             tasks=[
                 LoadDataVersion(),
-                LoadAgencies(),
-                LoadRoutes(),
-                LoadStops(),
                 LoadSchedules(),
                 GenerateTripHeadsign(),
                 SaveGTFS(GTFS_HEADERS, args.output, ensure_order=True),
