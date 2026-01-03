@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2025-2026 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable
 from datetime import datetime, timezone
 from operator import itemgetter
 from typing import IO, Any, cast
@@ -118,17 +118,11 @@ class LoadSchedules(Task):
         for route in json.list_iter(f, "rt.item"):
             self.process_route(db, route)
 
-    def process_route(self, db: DBConnection, r: Mapping[str, Any]) -> None:
-        trip_id = get_trip_id(r["sid"], r["oid"], r.get("toid"))
-        route_stations = cast(list[dict[str, Any]], r["st"])
-
-        if len(route_stations) < 2:
-            self.logger.warning("Trip %s has less than 2 stops - skipping", trip_id)
-            return
-
+    def process_route(self, db: DBConnection, r: json.Object) -> None:
         agency_id = self.get_agency_id(db, r["cc"])
         route_id = self.get_route_id(db, agency_id, r["ccs"])
         calendar_id = self.get_calendar_id(db, r["od"])
+        trip_id = get_trip_id(r["sid"], r["oid"], r.get("toid"))
 
         plk_number = get_fallback(r, "nn", "idn", "ian", default="")
         display_number = get_fallback(r, "idn", "ian", "nn", default="")
@@ -148,8 +142,9 @@ class LoadSchedules(Task):
             (trip_id, route_id, calendar_id, display_number, extra_fields),
         )
 
+        route_stations = cast(list[dict[str, Any]], r["st"])
         route_stations.sort(key=itemgetter("ord"))
-        for i, route_station in enumerate(r["st"]):
+        for i, route_station in enumerate(route_stations):
             self.process_route_stop(db, trip_id, i, route_station)
 
     def process_route_stop(
@@ -157,7 +152,7 @@ class LoadSchedules(Task):
         db: DBConnection,
         trip_id: str,
         sequence: int,
-        s: Mapping[str, Any],
+        s: json.Object,
     ) -> None:
         stop_id = self.get_stop_id(db, s["id"])
         order = cast(int, s["ord"])
@@ -251,7 +246,7 @@ def parse_time(x: str, day_offset: int = 0) -> int:
     return h * HOUR + m * MINUTE + s
 
 
-def get_fallback[T](obj: Mapping[str, Any], *keys: str, default: T) -> T:
+def get_fallback[T](obj: json.Object, *keys: str, default: T) -> T:
     for key in keys:
         if item := obj.get(key):
             return cast(T, item)

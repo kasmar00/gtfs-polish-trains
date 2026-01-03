@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Mikołaj Kuranowski
+# SPDX-FileCopyrightText: 2025-2026 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
 from argparse import ArgumentParser, Namespace
@@ -8,7 +8,7 @@ from typing import cast
 from impuls import App, HTTPResource, Pipeline, PipelineOptions
 from impuls.model import Date
 from impuls.resource import TimeLimitedResource
-from impuls.tasks import GenerateTripHeadsign, SaveGTFS
+from impuls.tasks import ExecuteSQL, GenerateTripHeadsign, RemoveUnusedEntities, SaveGTFS
 
 from ..apikey import get_apikey
 from .load_schedules import LoadSchedules
@@ -99,6 +99,11 @@ class PolishTrainsGTFS(App):
             },
             tasks=[
                 LoadSchedules(),
+                ExecuteSQL(
+                    statement="DELETE FROM agencies WHERE agency_id = 'WKD'",
+                    task_name="DropWKD",
+                ),
+                RemoveUnusedEntities(),
                 LoadStops(),
                 GenerateTripHeadsign(),
                 SaveGTFS(GTFS_HEADERS, args.output, ensure_order=True),

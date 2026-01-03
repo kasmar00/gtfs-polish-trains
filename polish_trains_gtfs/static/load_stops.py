@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Mikołaj Kuranowski
+# SPDX-FileCopyrightText: 2025-2026 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
 
