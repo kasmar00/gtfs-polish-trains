@@ -66,7 +66,7 @@ class NameSelector(Selector):
         return False
 
     def matches(self, t: Trip, stops: Iterable[str]) -> str | None:
-        name = t.get_extra_field("trip_long_name") or ""
+        name = t.get_extra_field("plk_train_name") or ""
         if m := self.name_pattern.search(name):
             return m.expand(self.route_code)
         return None

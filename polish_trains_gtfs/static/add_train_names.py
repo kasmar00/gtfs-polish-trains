@@ -65,9 +65,9 @@ class AddTrainNames(Task):
 
     def get_all_trains_with_names(self, db: DBConnection) -> Iterable[TrainWithName]:
         q = db.raw_execute(
-            "SELECT trip_id, agency_id, trips.extra_fields_json ->> 'trip_long_name' "
+            "SELECT trip_id, agency_id, trips.extra_fields_json ->> 'plk_train_name' "
             "FROM trips LEFT JOIN routes USING (route_id) "
-            "WHERE trips.extra_fields_json ->> 'trip_long_name' != ''",
+            "WHERE trips.extra_fields_json ->> 'plk_train_name' != ''",
         )
         for row in q:
             yield TrainWithName(

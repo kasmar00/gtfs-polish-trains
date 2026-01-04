@@ -126,14 +126,13 @@ class LoadSchedules(Task):
 
         plk_number = get_fallback(r, "nn", "idn", "ian", default="")
         display_number = get_fallback(r, "idn", "ian", "nn", default="")
-        long_name = get_fallback(r, "nm", default="")
+        plk_name = get_fallback(r, "nm", default="")
 
         extra_fields = json.dumps(
             {
-                "order_id": str(r["oid"]),
                 "plk_category_code": r["ccs"],
                 "plk_train_number": plk_number,
-                "trip_long_name": long_name,
+                "plk_train_name": plk_name,
             }
         )
 

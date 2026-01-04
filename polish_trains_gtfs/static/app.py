@@ -72,7 +72,6 @@ GTFS_HEADERS = {
         "service_id",
         "trip_short_name",
         "trip_headsign",
-        "order_id",
         "plk_category_code",
         "plk_train_number",
     ),
