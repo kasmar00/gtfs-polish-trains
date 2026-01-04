@@ -1,0 +1,193 @@
+KS:
+  routes:
+    - route_code: "Os"
+      select:
+        - {name: 'ZSSK'}
+        - {name: 'ESKO S7'}
+    - route_code: '\1'
+      select: [{name: '/(S[0-9]{1,2})'}]
+    - route_code: '\1'
+      select: [{name: '(S[0-9]{1,2})'}]
+
+KD:
+  # Try to select a route ignoring all stops up to Wrocław Główny
+  disregard_stops_up_to: 60103
+
+  routes:
+    # === Branch Lines ===
+
+    - route_code: "Os"
+      select:
+        - passes_through: [140533]  # Berlin-Lichtenberg
+        - passes_through: [1107]  # Szczecin Dąbie
+
+    - route_code: "D96"
+      select:
+        - passes_through: [57943]  # Nowa Ruda
+    - route_code: "D93"
+      select:
+        - passes_through: [56713]  # Paczków
+    - route_code: "D91"
+      select:
+        - passes_through: [53553]  # Jawor
+        - passes_through: [56309]  # Strzegom
+        - passes_through: [57703]  # Ząbkowice Śląskie
+    - route_code: "D90"
+      select:
+        - passes_through: [57463, 57497]  # Kłodzko Miasto & Polanica Zdrój
+
+    - route_code: "D83"
+      select:
+        - passes_through: [44008]  # Krotoszyn
+        - passes_through: [59675]  # Milicz
+    - route_code: "D82"
+      select:
+        - passes_through: [59691]  # Twardogóra
+        - passes_through: [46052]  # Odolanów
+        - passes_through: [45906]  # Ostrów Wlkp.
+    - route_code: "D81"
+      select:
+        - passes_through: [59709]  # Cieśle
+    - route_code: "D80"
+      select:
+        - passes_through: [59584]  # Bierutów
+        - passes_through: [62307]  # Namysłów
+        - passes_through: [61200]  # Kluczbork
+    - route_code: "D83"  # Other services passing through Oleśnica, but not D8*
+      select:
+        - passes_through: [59501]  # Oleśnica
+
+    - route_code: "D71"
+      select:
+        - passes_through: [58388]  # Biskupice Oławskie
+    - route_code: "D70"
+      select:
+        - passes_through: [59287]  # Wrocław Wojnów
+
+    - route_code: "D66"
+      select:
+        - passes_through: [55277]  # Kamienna Góra
+        - passes_through: [55509]  # Lubawka
+        - passes_through: [179234]  # Královec
+    - route_code: "D64"
+      select:
+        - passes_through: [54775]  # Zagórze Śląskie
+    - route_code: "D62"
+      select:
+        - passes_through: [280345]  # Studniska
+        - passes_through: [52357]  # Gryfów Śląski
+        - passes_through: [52415]  # Mirsk
+        - passes_through: [52449]  # Świeradów-Zdrój
+        - passes_through: [55848]  # Stara Kamienica
+        - passes_through: [55970]  # Mysałkowice
+        - passes_through: [56028]  # Karpacz
+    - route_code: "D61"
+      select:
+        - passes_through: [241793]  # Harrachov
+    - route_code: "D60"
+      select:
+        - passes_through: [56143]  # Piechowice
+
+    - route_code: "D4"  # D40 is more generic than D4
+      select:
+        - passes_through: [58412]  # Kobierzyce
+        - passes_through: [58487]  # Sobótka
+
+    - route_code: "D30"
+      select:
+        - passes_through: [42606]  # Leszno
+
+    - route_code: "D23"
+      select:
+        - passes_through: [42887]  # Wschowa
+    - route_code: "D20"
+      select:
+        - passes_through: [60400, 42002]  # Ścinawa & Nowa Sól
+        - passes_through: [60400, 27805]  # Ścinawa & Zielona Góra Główna
+        - passes_through: [60103, 27805]  # Wrocław Główny & Zielona Góra Główna
+
+    - route_code: "D18"
+      select:
+        - passes_through: [52027]  # Ruszów
+        - passes_through: [27912]  # Nowogród Osiedle
+    - route_code: "D13"  # Needs to match before D14 due to ambiguity with Rokitki sta.
+      select:
+        - passes_through: [54262]  # Chocianów
+    - route_code: "D14"
+      select:
+        - passes_through: [179210]  # Forst
+        - passes_through: [41707]  # Tulipce
+        - passes_through: [41277]  # Małomice
+        - passes_through: [54205]  # Rokitki
+    - route_code: "D12"
+      select:
+        - passes_through: [53280, 42002]  # Lubin & Nowa Sól
+    - route_code: "D11"
+      select:
+        - passes_through: [53280]  # Lubin
+    - route_code: "D10"
+      select:
+        - passes_through: [51862]  # Zgorzelec Miasto
+
+    # === Ambiguous Branch Lines ===
+
+    - route_code: "D20" # Zielona Góra - Głogów services
+      select:
+        - passes_through: [42002]  # Nowa Sól
+
+    - route_code: "D10" # Görlitz - Zgorzelec services
+      select:
+        - passes_through: [179216]  # Görlitz
+
+    # === Trunk Lines ===
+
+    - route_code: "D9"
+      select:
+        - passes_through: [59808]  # Strzelin
+        - passes_through: [56424]  # Ziębice
+        - passes_through: [57463]  # Kłodzko Miasto
+        - passes_through: [57414]  # Bystrzyca Kłodzka
+        - passes_through: [57208]  # Międzylesie
+        - passes_through: [179228]  # Lichkov
+
+    - route_code: "D8"
+      select:
+        - passes_through: [59394]  # Trzebnica
+
+    - route_code: "D7"
+      select:
+        - passes_through: [58172]  # Jelcz Miłoszyce
+
+    - route_code: "D40"  # D40 needs to match before D6 for Wrocław - Bielawa services
+      select:
+        - passes_through: [54940]  # Bielawa Zachodnia
+
+    - route_code: "D6"
+      select:
+        - passes_through: [55806]  # Jelenia Góra
+        - passes_through: [55632]  # Sędzisław
+        - passes_through: [55103]  # Wałbrzych Główny
+        - passes_through: [54528]  # Świebodzice
+        - passes_through: [58933]  # Kąty Wrocławskie
+
+    - route_code: "D5"
+      select:
+        - passes_through: [58271]  # Oława
+
+    - route_code: "D3"
+      select:
+        - passes_through: [58784]  # Oborniki Śląskie
+        - passes_through: [44305]  # Rawicz
+
+    - route_code: "D2"
+      select:
+        - passes_through: [60400]  # Ścinawa
+        - passes_through: [60269]  # Brzeg Dolny
+
+    - route_code: "D1"
+      select:
+        - passes_through: [53850]  # Bolesławiec
+        - passes_through: [54007]  # Chojnów
+        - passes_through: [53009]  # Legnica
+        - passes_through: [59048]  # Środa Śląska
+        - passes_through: [51920]  # Gierałtów Wykroty

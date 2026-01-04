@@ -21,7 +21,7 @@ class CuratedRouteMatcher(TypedDict):
 
 class CuratedRoute(TypedDict):
     id: str
-    match: list[CuratedRouteMatcher]
+    match: NotRequired[list[CuratedRouteMatcher]]
     short_name: str
     long_name: str
     color: NotRequired[str]
@@ -145,7 +145,7 @@ class CurateRoutes(Task):
         to_curate.pop(data["id"], None)  # Remove implicit match on exact route_id
 
         curated = set[str]()
-        matchers = [RouteMatcher(**m) for m in data["match"]]
+        matchers = [RouteMatcher(**m) for m in data.get("match", [])]
         for route_id, route in to_curate.items():
             if any(m.matches(route) for m in matchers):
                 curated.add(route_id)

@@ -12,6 +12,7 @@ from impuls.tasks import ExecuteSQL, GenerateTripHeadsign, RemoveUnusedEntities,
 
 from ..apikey import get_apikey
 from .curate_routes import CurateRoutes
+from .extract_routes import ExtractRoutes
 from .load_schedules import LoadSchedules
 from .load_stops import LoadStops
 from .shift_negative_times import ShiftNegativeTimes
@@ -109,6 +110,7 @@ class PolishTrainsGTFS(App):
                     "https://raw.githubusercontent.com/MKuranowski/PLRailMap/master/plrailmap.osm"
                 ),
                 "routes.yaml": LocalResource("data/routes.yaml"),
+                "route_extract.yaml": LocalResource("data/route_extract.yaml"),
             },
             tasks=[
                 LoadSchedules(),
@@ -117,6 +119,7 @@ class PolishTrainsGTFS(App):
                     task_name="DropWKD",
                 ),
                 RemoveUnusedEntities(),
+                ExtractRoutes(),
                 CurateRoutes(),
                 LoadStops(),
                 ShiftNegativeTimes(),
