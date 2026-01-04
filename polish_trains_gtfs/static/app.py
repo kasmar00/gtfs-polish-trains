@@ -11,6 +11,7 @@ from impuls.resource import LocalResource, TimeLimitedResource
 from impuls.tasks import ExecuteSQL, GenerateTripHeadsign, RemoveUnusedEntities, SaveGTFS
 
 from ..apikey import get_apikey
+from .add_train_names import AddTrainNames
 from .curate_routes import CurateRoutes
 from .extract_routes import ExtractRoutes
 from .load_schedules import LoadSchedules
@@ -70,7 +71,6 @@ GTFS_HEADERS = {
         "route_id",
         "service_id",
         "trip_short_name",
-        "trip_long_name",
         "trip_headsign",
         "order_id",
         "plk_category_code",
@@ -130,6 +130,7 @@ class PolishTrainsGTFS(App):
                     ),
                     task_name="FixTimesAtMockava",
                 ),
+                AddTrainNames(),
                 GenerateTripHeadsign(),
                 SaveGTFS(GTFS_HEADERS, args.output, ensure_order=True),
             ],
