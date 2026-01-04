@@ -44,8 +44,8 @@ class ShiftNegativeTimes(Task):
         )
         new_calendar_id = self.get_shifted_calendar_id(db, old_calendar_id, day_offset)
         db.raw_execute(
-            "UPDATE trips SET calendar_id = ? WHERE calendar_id = ?",
-            (new_calendar_id, old_calendar_id),
+            "UPDATE trips SET calendar_id = ? WHERE trip_id = ?",
+            (new_calendar_id, trip_id),
         )
 
         time_offset = DAY * -day_offset
