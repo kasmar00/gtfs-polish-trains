@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025-2026 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
+import logging
 from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime
@@ -13,6 +14,8 @@ from .. import json
 from . import gtfs_realtime_pb2
 from .fact import Fact, FactContainer
 from .schedules import GtfsTripKey, LiveTripKey, Schedules
+
+logger = logging.getLogger("Alerts")
 
 
 @dataclass
@@ -49,10 +52,13 @@ def fetch_alerts(s: requests.Session, schedules: Schedules) -> FactContainer[Ale
         r.raise_for_status()
         data = r.json()
 
-    return FactContainer(
+    c = FactContainer(
         timestamp=datetime.fromisoformat(data["ts"]),
         facts=[a for i in data["ds"] if (a := parse_alert(i, schedules))],
     )
+
+    logger.info("Alerts fetched successfully; total %d", len(c.facts))
+    return c
 
 
 def parse_alert(d: json.Object, schedules: Schedules) -> Alert | None:

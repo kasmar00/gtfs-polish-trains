@@ -13,6 +13,7 @@ from impuls.tools import logs
 
 from ..apikey import get_apikey
 from .alerts import fetch_alerts
+from .backoff import Backoff
 from .delays import fetch_delays
 from .schedules import Schedules
 
@@ -25,6 +26,7 @@ class Args:
     human_readable: bool
     json: bool
     user_agent_suffix: str
+    loop: int
 
     def get_json_path(self) -> Path:
         return self.output.with_suffix(".json")
@@ -64,6 +66,16 @@ class Args:
             default="",
             help="additional string to include in User-Agent sent to the API",
         )
+        arg_parser.add_argument(
+            "-l",
+            "--loop",
+            type=int,
+            default=0,
+            help=(
+                "run the converter indefinitely every N seconds "
+                "(<= 0 for single run, defaults to zero)"
+            ),
+        )
         arg_parser.add_argument("type", choices=["alerts", "updates"])
         args = arg_parser.parse_args(argv)
         return cls(
@@ -73,6 +85,7 @@ class Args:
             human_readable=args.human_readable,
             json=args.json,
             user_agent_suffix=args.user_agent,
+            loop=args.loop,
         )
 
 
@@ -83,7 +96,12 @@ def main(argv: Sequence[str] | None = None) -> None:
     session = get_session(get_apikey(), args.user_agent_suffix)
     schedules = Schedules.load_from_gtfs(args.gtfs)
 
-    one_shot(session, schedules, args)
+    run = lambda: one_shot(session, schedules, args)  # noqa: E731
+
+    if args.loop <= 0:
+        run()
+    else:
+        Backoff(args.loop).loop(run)
 
 
 def get_session(key: str, user_agent_suffix: str = "") -> requests.Session:
