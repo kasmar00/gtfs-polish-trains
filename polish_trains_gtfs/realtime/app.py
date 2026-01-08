@@ -8,13 +8,16 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Self
 
+from impuls.tools import logs
+
 from ..apikey import get_apikey
-from .alerts import fetch_alerts
+from . import lookup
 from .delays import fetch_delays
 
 
 @dataclass
 class Args:
+    gtfs: Path
     output: Path
     human_readable: bool
     json: bool
@@ -25,6 +28,13 @@ class Args:
     @classmethod
     def parse(cls, argv: Sequence[str] | None = None) -> Self:
         arg_parser = ArgumentParser()
+        arg_parser.add_argument(
+            "-g",
+            "--gtfs",
+            type=Path,
+            default=Path("polish_trains.zip"),
+            help="path to the GTFS Schedule file",
+        )
         arg_parser.add_argument(
             "-o",
             "--output",
@@ -45,14 +55,17 @@ class Args:
             help="also write realtime data in json format",
         )
         args = arg_parser.parse_args(argv)
-        return cls(args.output, args.human_readable, args.json)
+        return cls(args.gtfs, args.output, args.human_readable, args.json)
 
 
 def main(argv: Sequence[str] | None = None) -> None:
     args = Args.parse(argv)
+    logs.initialize(verbose=False)
     apikey = get_apikey()
 
-    facts = fetch_alerts(apikey).merge(fetch_delays(apikey))
+    lookup_table = lookup.load_from_gtfs(args.gtfs)
+    # facts = fetch_alerts(apikey).merge(fetch_delays(apikey))
+    facts = fetch_delays(apikey, lookup_table)
 
     update_file(
         str(facts.as_gtfs_rt()) if args.human_readable else facts.as_gtfs_rt().SerializeToString(),
@@ -63,7 +76,7 @@ def main(argv: Sequence[str] | None = None) -> None:
             json.dumps(
                 facts.as_json(),
                 indent=2 if args.human_readable else None,
-                separators=(",", ":"),
+                separators=(",", ": ") if args.human_readable else (",", ":"),
             ),
             args.get_json_path(),
         )
