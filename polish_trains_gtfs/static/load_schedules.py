@@ -254,8 +254,9 @@ class LoadSchedules(Task):
         numbers = list[str]()
         for s in route["st"]:
             a = get_fallback(s, "dtn", "atn", default="").lstrip("0")
+            is_invalid = "brak" in a or "/" in a
             is_international = a == international_number or len(a) <= 3
-            if a and not is_international and a not in seen_numbers:
+            if a and not is_invalid and not is_international and a not in seen_numbers:
                 seen_numbers.add(a)
                 numbers.append(a)
 
