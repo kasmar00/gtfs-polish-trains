@@ -96,7 +96,9 @@ class PolishTrainsGTFS(App):
 
     def prepare(self, args: Namespace, options: PipelineOptions) -> Pipeline:
         apikey = get_apikey()
-        start_date = cast(Date, args.start_date)
+
+        # NOTE: We need to fetch schedules from start_date-1 to properly show night trains.
+        start_date = cast(Date, args.start_date).add_days(-1)
         end_date = start_date.add_days(31)
 
         return Pipeline(

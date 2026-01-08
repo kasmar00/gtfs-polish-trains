@@ -74,7 +74,12 @@ class LoadSchedules(Task):
 
     def load_feed_info(self, db: DBConnection, f: IO[bytes]) -> None:
         timestamp = self.load_update_timestamp(f).astimezone(TZ)
+
+        # Shift start_date by one, as the very first day will be missing night trains
+        # starting two days ago. This means, that only start_date+1 has full schedules available.
         start_date, end_date = self.load_feed_dates(f)
+        start_date = start_date.add_days(1)
+
         db.create(
             FeedInfo(
                 publisher_name="Mikołaj Kuranowski",
