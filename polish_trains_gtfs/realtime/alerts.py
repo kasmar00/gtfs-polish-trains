@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import requests
 from impuls.model import Date
@@ -14,6 +15,8 @@ from .. import json
 from . import gtfs_realtime_pb2
 from .fact import Fact, FactContainer
 from .schedules import GtfsTripKey, LiveTripKey, Schedules
+
+TZ = ZoneInfo("Europe/Warsaw")
 
 logger = logging.getLogger("Alerts")
 
@@ -53,7 +56,7 @@ def fetch_alerts(s: requests.Session, schedules: Schedules) -> FactContainer[Ale
         data = r.json()
 
     c = FactContainer(
-        timestamp=datetime.fromisoformat(data["ts"]),
+        timestamp=datetime.fromisoformat(data["ts"]).astimezone(TZ),
         facts=[a for i in data["ds"] if (a := parse_alert(i, schedules))],
     )
 

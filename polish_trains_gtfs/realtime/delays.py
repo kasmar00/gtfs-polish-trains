@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, cast
+from zoneinfo import ZoneInfo
 
 import requests
 from impuls.model import Date
@@ -19,6 +20,8 @@ logger = logging.getLogger("Delays")
 
 PAGE_SIZE = 20_000  # Limited by the API
 MAX_PAGES = 10
+
+TZ = ZoneInfo("Europe/Warsaw")
 
 
 @dataclass
@@ -113,7 +116,7 @@ def fetch_delays(s: requests.Session, schedules: Schedules) -> FactContainer[Tri
 
             # Parse the timestamp at the first page
             if page == 1:
-                container.timestamp = datetime.fromisoformat(data["ts"])
+                container.timestamp = datetime.fromisoformat(data["ts"]).astimezone(TZ)
 
             # Parse the facts
             container.facts.extend(
@@ -183,6 +186,15 @@ def parse_stop_delay(s: json.Object, stop_time: StopTime) -> StopDelay:
         stop_sequence=stop_time.stop_sequence,
         cancelled=s.get("cn") or False,
         confirmed=s.get("cf") or False,
-        live_arrival=(datetime.fromisoformat(timestamp) if (timestamp := s.get("aa")) else None),
-        live_departure=(datetime.fromisoformat(timestamp) if (timestamp := s.get("ad")) else None),
+        live_arrival=parse_timestamp(s.get("aa")),
+        live_departure=parse_timestamp(s.get("ad")),
     )
+
+
+def parse_timestamp(s: str | None) -> datetime | None:
+    if s is None:
+        return None
+    t = datetime.fromisoformat(s)
+    if t.tzinfo is None:
+        t = t.replace(tzinfo=TZ)  # without an explicit timezone, assume it's in Europe/Warsaw
+    return t
