@@ -574,6 +574,7 @@ agencies:
     alternative_ids: ["Leo Express"]
     name: "Leo Express"
     url: "https://www.leoexpress.com/"
+    phone: "+48 22 263 02 97"
     routes:
       - id: "LEO"
         match: [{}]
