@@ -27,6 +27,7 @@ class Args:
     json: bool
     user_agent_suffix: str
     loop: int
+    verbose: bool
 
     def get_json_path(self) -> Path:
         return self.output.with_suffix(".json")
@@ -76,6 +77,12 @@ class Args:
                 "(<= 0 for single run, defaults to zero)"
             ),
         )
+        arg_parser.add_argument(
+            "-v",
+            "--verbose",
+            action="store_true",
+            help="show debug logging",
+        )
         arg_parser.add_argument("type", choices=["alerts", "updates"])
         args = arg_parser.parse_args(argv)
         return cls(
@@ -86,12 +93,13 @@ class Args:
             json=args.json,
             user_agent_suffix=args.user_agent,
             loop=args.loop,
+            verbose=args.verbose,
         )
 
 
 def main(argv: Sequence[str] | None = None) -> None:
     args = Args.parse(argv)
-    logs.initialize(verbose=False)
+    logs.initialize(verbose=args.verbose)
 
     session = get_session(get_apikey(), args.user_agent_suffix)
     schedules = Schedules.load_from_gtfs(args.gtfs)
