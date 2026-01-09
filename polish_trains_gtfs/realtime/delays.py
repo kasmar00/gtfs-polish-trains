@@ -13,6 +13,7 @@ from impuls.model import Date
 
 from .. import json
 from . import gtfs_realtime_pb2
+from .backoff import BackoffRequired
 from .fact import Fact, FactContainer
 from .schedules import GtfsTripKey, LiveTripKey, Schedules, StopTime
 
@@ -111,6 +112,7 @@ def fetch_delays(s: requests.Session, schedules: Schedules) -> FactContainer[Tri
             "https://pdp-api.plk-sa.pl/api/v1/operations/shortened",
             params={"page": str(page), "pageSize": str(page_size), "fullRoutes": "true"},
         ) as r:
+            BackoffRequired.check_api_response(r)
             r.raise_for_status()
             data = r.json()
 

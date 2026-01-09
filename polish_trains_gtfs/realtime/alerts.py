@@ -13,6 +13,7 @@ from impuls.model import Date
 
 from .. import json
 from . import gtfs_realtime_pb2
+from .backoff import BackoffRequired
 from .fact import Fact, FactContainer
 from .schedules import GtfsTripKey, LiveTripKey, Schedules
 
@@ -52,6 +53,7 @@ class Alert(Fact):
 
 def fetch_alerts(s: requests.Session, schedules: Schedules) -> FactContainer[Alert]:
     with s.get("https://pdp-api.plk-sa.pl/api/v1/disruptions/shortened") as r:
+        BackoffRequired.check_api_response(r)
         r.raise_for_status()
         data = r.json()
 
