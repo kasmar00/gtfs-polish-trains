@@ -71,7 +71,7 @@ class Backoff:
                 self.recalculate_pause(failed=True)
                 force_min_pause = e.force_pause_s
                 logger.error(
-                    "Backing off for %s s: %s",
+                    "Backing off for %s: %s",
                     format_period(max(self.pause, force_min_pause)),
                     e.args[0],
                 )
