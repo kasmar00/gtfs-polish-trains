@@ -10,6 +10,8 @@ import requests
 
 logger = logging.getLogger("Backoff")
 
+BACKOFF_RESPONSE_CODES = {429, 500, 503}
+
 
 class BackoffRequired(ValueError):
     def __init__(self, context: str = "", force_pause_s: float = 0.0) -> None:
@@ -18,18 +20,17 @@ class BackoffRequired(ValueError):
 
     @classmethod
     def check_api_response(cls, r: requests.Response) -> None:
-        if r.status_code == 500:
-            raise cls(f"{r.url}: 500 Internal Server Error")
-        elif r.status_code == 429:
-            raise cls(
-                f"{r.url}: 429 Too Many Requests",
-                force_pause_s=(
-                    pause
-                    if "X-Ratelimit-Reset" in r.headers
-                    and 0 <= (pause := int(r.headers["X-Ratelimit-Reset"])) <= 3600
-                    else 0.0
-                ),
+        if r.status_code in BACKOFF_RESPONSE_CODES:
+            msg = f"{r.url}: {r.status_code} {r.reason}"
+            force_pause_s = (
+                pause
+                if r.status_code == 429
+                and "X-Ratelimit-Reset" in r.headers
+                and 0 <= (pause := int(r.headers["X-Ratelimit-Reset"])) <= 3600
+                else 0.0
             )
+            raise BackoffRequired(msg, force_pause_s)
+        r.raise_for_status()
 
 
 class Backoff:

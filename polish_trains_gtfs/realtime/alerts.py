@@ -54,7 +54,6 @@ class Alert(Fact):
 def fetch_alerts(s: requests.Session, schedules: Schedules) -> FactContainer[Alert]:
     with s.get("https://pdp-api.plk-sa.pl/api/v1/disruptions/shortened") as r:
         BackoffRequired.check_api_response(r)
-        r.raise_for_status()
         data = r.json()
 
     c = FactContainer(

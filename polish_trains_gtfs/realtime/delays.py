@@ -113,7 +113,6 @@ def fetch_delays(s: requests.Session, schedules: Schedules) -> FactContainer[Tri
             params={"page": str(page), "pageSize": str(page_size), "fullRoutes": "true"},
         ) as r:
             BackoffRequired.check_api_response(r)
-            r.raise_for_status()
             data = r.json()
 
             # Parse the timestamp at the first page
