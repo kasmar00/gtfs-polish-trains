@@ -295,9 +295,13 @@ class GeoTripMatcher:
         return self.stop_id_by_hint[closest_hint]
 
     def calc_bearing(self, prev_id: str | None, curr_id: str, next_id: str | None) -> float:
-        towards = next_id or prev_id
-        assert towards, "single-stop trips are not supported"
-        return initial_bearing(*self.stop_locations[curr_id], *self.stop_locations[towards]) % 360
+        if next_id:
+            a, b = curr_id, next_id
+        elif prev_id:
+            a, b = prev_id, curr_id
+        else:
+            raise ValueError("single-stop trips are not supported")
+        return initial_bearing(*self.stop_locations[a], *self.stop_locations[b]) % 360
 
 
 def get_stop_name(db: DBConnection, stop_id: str) -> str:
