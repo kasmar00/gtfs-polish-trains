@@ -132,7 +132,7 @@ class LoadSchedules(Task):
         agency_id = self.get_agency_id(db, r["cc"])
         calendar_id = self.calendars.upsert(db, (Date.from_ymd_str(i[:10]) for i in r["od"]))
         order_id = str(r["oid"])
-        first_date = Date.from_ymd_str(min(r["od"])[:10])
+        trip_id = self.get_trip_id(agency_id, order_id)
 
         route_code = self.resolve_route_code(r)
         route_id = self.get_route_id(db, agency_id, route_code)
@@ -141,14 +141,11 @@ class LoadSchedules(Task):
         display_number = get_fallback(r, "idn", "ian", default=plk_number)
         plk_name = get_fallback(r, "nm", default="")
 
-        trip_id = self.get_trip_id(agency_id, plk_number, order_id, first_date)
-
         extra_fields = json.dumps(
             {
                 "plk_category_code": route_code,
                 "plk_train_number": plk_number,
                 "plk_train_name": plk_name,
-                "plk_order_id": order_id,
             }
         )
 
@@ -279,10 +276,8 @@ class LoadSchedules(Task):
         else:
             return route["ccs"]
 
-    def get_trip_id(self, agency_id: str, number: str, order_id: str, first_date: Date) -> str:
-        base = "_".join(
-            ("PLK", agency_id, number.replace("/", "-") or order_id, first_date.isoformat()),
-        )
+    def get_trip_id(self, agency_id: str, order_id: str) -> str:
+        base = f"PLK_{agency_id}_{order_id}"
         id = find_non_conflicting_id(self.used_trip_ids, base, "_")
         if id != base:
             self.logger.warning("Non-unique trip_id: %s", base)

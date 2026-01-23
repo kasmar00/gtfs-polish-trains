@@ -84,7 +84,6 @@ GTFS_HEADERS = {
         "plk_category_code",
         "plk_train_number",
         "plk_train_name",
-        "plk_order_id",
     ),
 }
 
