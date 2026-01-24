@@ -62,6 +62,9 @@ GTFS_HEADERS = {
         "stop_lon",
         "location_type",
         "parent_station",
+        "stop_timezone",
+        "country",
+        "plk_secondary_id",
     ),
     "stop_times.txt": (
         "trip_id",
@@ -164,14 +167,23 @@ class PolishTrainsGTFS(App):
                     task_name="FixMissingBusPlatforms",
                 ),
                 SplitBusLegs(),
+                RemoveUnusedEntities(),
+                LoadBusStops(),
                 ExecuteSQL(
                     statement=(
-                        "DELETE FROM routes WHERE NOT EXISTS "
-                        "(SELECT 1 FROM trips WHERE trips.route_id = routes.route_id)"
+                        "UPDATE stops SET extra_fields_json = json_set("
+                        "  extra_fields_json,"
+                        "  '$.stop_timezone',"
+                        "  CASE extra_fields_json ->> 'country'"
+                        "    WHEN 'BY' THEN 'Europe/Minsk'"
+                        "    WHEN 'LT' THEN 'Europe/Vilnius'"
+                        "    WHEN 'UA' THEN 'Europe/Kyiv'"
+                        "    ELSE ''"
+                        "  END"
+                        ")"
                     ),
-                    task_name="DropUnusedRoutes",
+                    task_name="SetStopTimezone",
                 ),
-                LoadBusStops(),
                 SaveGTFS(GTFS_HEADERS, args.output, ensure_order=True),
             ],
         )

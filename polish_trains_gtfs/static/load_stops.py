@@ -11,6 +11,8 @@ from xml.sax.xmlreader import AttributesImpl as XmlSaxAttributes
 
 import impuls
 
+from .. import json
+
 
 @dataclass
 class Station:
@@ -19,6 +21,7 @@ class Station:
     lat: float = 0.0
     lon: float = 0.0
     extra_id: str = ""
+    country: str = ""
 
     def __bool__(self) -> bool:
         return bool(self.id and self.name and self.lat and self.lon)
@@ -40,6 +43,8 @@ class PLRailMapLoader(XmlSaxContentHandler):
                 self.current_station.extra_id = attrs["v"]
             elif attrs["k"] == "name":
                 self.current_station.name = attrs["v"]
+            elif attrs["k"] == "country":
+                self.current_station.country = attrs["v"]
 
     def endElement(self, name: str) -> None:
         if name == "node" and self.current_station:
@@ -69,10 +74,15 @@ class LoadStops(impuls.Task):
         self._ensure_everything_curated()
 
     def _apply(self, station: Station, db: impuls.DBConnection) -> None:
+        extra_fields = json.dumps(
+            {"country": station.country, "plk_secondary_id": station.extra_id},
+        )
+
         if station.id in self.to_update:
             db.raw_execute(
-                "UPDATE stops SET name = ?, lat = ?, lon = ? WHERE stop_id = ?",
-                (station.name, station.lat, station.lon, station.id),
+                "UPDATE stops SET name = ?, lat = ?, lon = ?, extra_fields_json = ? "
+                "WHERE stop_id = ?",
+                (station.name, station.lat, station.lon, extra_fields, station.id),
             )
             if station.extra_id in self.to_update:
                 db.raw_execute(
@@ -82,8 +92,16 @@ class LoadStops(impuls.Task):
                 db.raw_execute("DELETE FROM stops WHERE stop_id = ?", (station.extra_id,))
         elif station.extra_id in self.to_update:
             db.raw_execute(
-                "UPDATE stops SET stop_id = ?, name = ?, lat = ?, lon = ? WHERE stop_id = ?",
-                (station.id, station.name, station.lat, station.lon, station.extra_id),
+                "UPDATE stops SET stop_id = ?, name = ?, lat = ?, lon = ?, extra_fields_json = ? "
+                "WHERE stop_id = ?",
+                (
+                    station.id,
+                    station.name,
+                    station.lat,
+                    station.lon,
+                    extra_fields,
+                    station.extra_id,
+                ),
             )
 
         self.to_update.pop(station.id, None)

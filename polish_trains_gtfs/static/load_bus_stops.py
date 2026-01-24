@@ -17,6 +17,8 @@ from impuls.model import Stop
 from impuls.tools.geo import initial_bearing
 from impuls.tools.types import StrPath
 
+from .. import json
+
 BEARING_CODE_TO_DEGREES = {
     "N": 0,
     "NE": 45,
@@ -217,6 +219,7 @@ class LoadBusStops(Task):
     def apply_stops(self, db: DBConnection, station_id: str, new_stops: Sequence[BusStop]) -> None:
         preserve_train = has_train_departures(db, station_id)
         existing_stop = db.retrieve_must(Stop, station_id)
+        new_extra_fields = json.dumps({"country": existing_stop.get_extra_field("country") or ""})
 
         if preserve_train:
             rail_id = f"{station_id}_RAIL"
@@ -225,16 +228,27 @@ class LoadBusStops(Task):
                 (rail_id, station_id),
             )
             db.raw_execute(
-                "INSERT INTO stops (stop_id,name,lat,lon,location_type) VALUES (?,?,?,?,1)",
-                (station_id, existing_stop.name, existing_stop.lat, existing_stop.lon),
+                "INSERT INTO stops (stop_id, name, lat, lon, location_type, extra_fields_json) "
+                "VALUES (?, ?, ?, ?, 1, ?)",
+                (
+                    station_id,
+                    existing_stop.name,
+                    existing_stop.lat,
+                    existing_stop.lon,
+                    existing_stop.extra_fields_json,
+                ),
             )
             db.raw_execute(
-                "UPDATE stops SET parent_station = ? WHERE stop_id = ?",
-                (station_id, rail_id),
+                "UPDATE stops SET parent_station = ?, extra_fields_json = ? WHERE stop_id = ?",
+                (station_id, new_extra_fields, rail_id),
             )
             db.raw_execute_many(
-                "INSERT INTO stops (stop_id,name,lat,lon,parent_station) VALUES (?,?,?,?,?)",
-                ((i.gtfs_id, existing_stop.name, i.lat, i.lon, station_id) for i in new_stops),
+                "INSERT INTO stops (stop_id, name, lat, lon, parent_station, extra_fields_json) "
+                "VALUES (?, ?, ?, ?, ?, ?)",
+                (
+                    (i.gtfs_id, existing_stop.name, i.lat, i.lon, station_id, new_extra_fields)
+                    for i in new_stops
+                ),
             )
         elif len(new_stops) > 1:
             lat = round(mean(i.lat for i in new_stops), 6)
