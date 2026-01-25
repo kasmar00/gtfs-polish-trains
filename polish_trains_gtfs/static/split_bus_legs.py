@@ -84,6 +84,7 @@ class SplitBusLegs(SplitTripLegs):
         else:
             new.platform = extra.get("arrival_platform", "")
             extra["track"] = extra.get("arrival_track", "")
+            extra["plk_category_code"] = extra.get("arrival_cc") or ""
 
         new.set_extra_fields(extra)
         return new
@@ -101,9 +102,10 @@ class SplitBusLegs(SplitTripLegs):
             new.stop_id = f"{station_id}_FALLBACK" if suffix else station_id
             new.platform = "BUS"
             extra["track"] = ""
-        elif new.platform == "BUS":
-            new.platform = ""
-            extra["track"] = ""
+        else:
+            new.platform = extra.get("departure_platform") or ""
+            extra["track"] = extra.get("departure_track") or ""
+            extra["plk_category_code"] = extra.get("departure_cc") or ""
 
         new.set_extra_fields(extra)
         return new

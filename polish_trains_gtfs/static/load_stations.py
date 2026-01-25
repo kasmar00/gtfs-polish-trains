@@ -1,9 +1,10 @@
 # SPDX-FileCopyrightText: 2026 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
-from collections import defaultdict
+import re
+from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping
-from typing import NamedTuple, cast
+from typing import NamedTuple, TypedDict, cast
 
 from impuls import DBConnection, Task, TaskRuntime
 from impuls.errors import DataError, MultipleDataErrors
@@ -29,6 +30,13 @@ class StationToUpdate(NamedTuple):
     trips: defaultdict[PlatformTrack, list[TripStop]]
 
 
+class ExternalPlatform(TypedDict):
+    platform: str
+    track: str
+    location: list[float] | None  # [lon, lat]
+    exact_location: bool
+
+
 FAKE_PLATFORMS = {"", "BUS", "WAYPOINT"}
 
 PLATFORM_MATCH_OVERRIDE: Mapping[tuple[str, str, str], tuple[str, str]] = {
@@ -37,19 +45,45 @@ PLATFORM_MATCH_OVERRIDE: Mapping[tuple[str, str, str], tuple[str, str]] = {
 }
 
 
+TRANSLATION_TABLE = str.maketrans(
+    {
+        "ą": "a",
+        "ć": "c",
+        "ę": "e",
+        "ł": "l",
+        "ó": "o",
+        "ń": "n",
+        "ś": "s",
+        "ź": "z",
+        "ż": "z",
+    }
+)
+
+
+def slug(s: str) -> str:
+    text = s.translate(TRANSLATION_TABLE).replace("(", "").replace(")", "")
+    return re.sub(r"[ \-\(\)]+", "-", re.sub(r"[^\x00-\x7F]+", "", text)).lower()
+
+
 class LoadStations(Task):
     to_update: dict[str, StationToUpdate]
+    external_platforms: dict[str, list[ExternalPlatform]]
+    location_sources: Counter[str]
 
     def __init__(self) -> None:
         super().__init__()
         self.to_update = {}
+        self.external_platforms = {}
+        self.location_sources = Counter()
 
     def execute(self, r: TaskRuntime) -> None:
         self.to_update = self.get_stations_to_update(r.db)
+        self.external_platforms = r.resources["platforms.json"].json(encoding="utf-8")
         stations = load_stations(r.resources["geo.osm"].stored_at)
         with r.db.transaction():
             for station in stations.values():
                 self.apply(r.db, station)
+        self.logger.info("Platform locations by source: %s", dict(self.location_sources))
         self.ensure_everything_updated()
 
     def apply(self, db: DBConnection, station: Station) -> None:
@@ -136,51 +170,93 @@ class LoadStations(Task):
 
     def create_platforms(self, db: DBConnection, station: Station) -> None:
         to_move = self.get_all_trips_to_move(station.all_ids())
+        station_slug = slug(station.name)
+        if station_slug not in self.external_platforms and any(
+            platform not in FAKE_PLATFORMS for platform, _ in to_move
+        ):
+            self.logger.warning(
+                "%s %s: station slug %r not found in platforms.json",
+                station.id,
+                station.name,
+                station_slug,
+            )
+        external_candidates = self.external_platforms.get(station_slug, [])
         for (platform, track), trips in to_move.items():
             if platform in FAKE_PLATFORMS:
                 self.move_departures(db, f"{station.id}_FALLBACK", trips)
             else:
-                # Find platform details in geo data
-                geo_platform = self.find_matching_platform(station, platform, track)
-                if station.platforms and not geo_platform:
-                    self.logger.warning(
-                        "%s %s: missing data for platform %r track %r",
-                        station.id,
-                        station.name,
-                        platform,
-                        track,
-                    )
-
-                # Prefer platform-specific geo data
-                if geo_platform:
-                    geo_obj = geo_platform
-                    display_platform = geo_platform.name or platform
-                    display_track = geo_platform.track or track
-                else:
-                    geo_obj = station
-                    display_platform = platform
-                    display_track = track
-
-                # Combine platform and track for platform_code
-                platform_code = (
-                    f"{display_platform} t. {display_track}" if display_track else display_platform
+                lat, lon, accessible = self.locate_platform(
+                    station, external_candidates, platform, track
                 )
-
-                # Insert the platform to the database
-                geo_obj = geo_platform or station
                 db_platform = Stop(
                     id=f"{station.id}_RAIL_{platform}_{track}",
                     name=station.name,
-                    lat=geo_obj.lat,
-                    lon=geo_obj.lon,
-                    wheelchair_boarding=geo_obj.accessible,
+                    lat=lat,
+                    lon=lon,
+                    wheelchair_boarding=accessible,
                     location_type=Stop.LocationType.STOP,
                     parent_station=station.id,
-                    platform_code=platform_code,
+                    platform_code=f"{platform}/{track}" if track else platform,
                     extra_fields_json=json.dumps({"country": station.country, "stop_access": "0"}),
                 )
                 db.create(db_platform)
                 self.move_departures(db, db_platform.id, trips)
+
+    def locate_platform(
+        self,
+        station: Station,
+        external_candidates: list[ExternalPlatform],
+        platform: str,
+        track: str,
+    ) -> tuple[float, float, bool | None]:
+        geo_platform = self.find_matching_platform(station, platform, track)
+
+        if geo_platform and geo_platform.track:
+            self.location_sources["geo+track"] += 1
+            return geo_platform.lat, geo_platform.lon, geo_platform.accessible
+
+        external_platform = (
+            self.find_external_platform(external_candidates, platform, track) if track else None
+        )
+        if external_platform:
+            if external_platform["exact_location"] and external_platform["location"]:
+                self.location_sources["platforms.json"] += 1
+                location = external_platform["location"]
+                return location[1], location[0], station.accessible
+            self.logger.debug(
+                "%s %s: skipping platforms.json location for platform %r track %r "
+                "(exact_location=%s)",
+                station.id,
+                station.name,
+                platform,
+                track,
+                external_platform["exact_location"],
+            )
+
+        if geo_platform:
+            self.location_sources["geo platform-only"] += 1
+            return geo_platform.lat, geo_platform.lon, geo_platform.accessible
+
+        self.logger.debug(
+            "%s %s: missing data for platform %r track %r",
+            station.id,
+            station.name,
+            platform,
+            track,
+        )
+        self.location_sources["station"] += 1
+        return station.lat, station.lon, station.accessible
+
+    def find_external_platform(
+        self,
+        candidates: list[ExternalPlatform],
+        platform: str,
+        track: str,
+    ) -> ExternalPlatform | None:
+        hits = [p for p in candidates if p["platform"] == platform]
+        if len(hits) > 1:
+            hits = [p for p in hits if p["track"] == track]
+        return hits[0] if len(hits) == 1 else None
 
     def find_matching_platform(
         self,
