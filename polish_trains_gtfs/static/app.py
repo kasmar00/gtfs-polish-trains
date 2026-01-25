@@ -13,13 +13,16 @@ from .add_train_names import AddTrainNames
 from .assign_direction_id import AssignDirectionID
 from .curate_routes import CurateRoutes
 from .extract_routes import ExtractRoutes
-from .generate_shapes import GenerateBusShapes, GenerateShapes
+# Unused, shapes generated from OSRM
+# from .generate_shapes import GenerateBusShapes, GenerateShapes
 from .load_bus_stops import LoadBusStops
 from .load_schedules import LoadSchedules
 from .load_stops import LoadStops
 from .shift_negative_times import ShiftNegativeTimes
 from .split_bus_legs import SplitBusLegs
 from .util.apikey import get_apikey
+from .load_platforms import FixTransferPlatforms, LoadPlatformData
+from .shapes import AddShapes
 
 GTFS_HEADERS = {
     "agency.txt": (
@@ -64,6 +67,7 @@ GTFS_HEADERS = {
         "stop_lon",
         "location_type",
         "parent_station",
+        "platform_code",
         "stop_timezone",
         "country",
         "plk_secondary_id",
@@ -82,25 +86,30 @@ GTFS_HEADERS = {
         "plk_category_code",
         "plk_sequence",
     ),
-    "transfers.txt": ("from_stop_id", "to_stop_id", "from_trip_id", "to_trip_id", "transfer_type"),
+    "transfers.txt": (
+        "from_stop_id",
+        "to_stop_id",
+        "from_trip_id",
+        "to_trip_id",
+        "transfer_type",
+    ),
     "trips.txt": (
         "trip_id",
         "route_id",
         "service_id",
         "direction_id",
-        "shape_id",
         "trip_short_name",
         "trip_headsign",
         "plk_category_code",
         "plk_train_number",
         "plk_train_name",
-    ),
-    "shapes.txt": (
         "shape_id",
-        "shape_pt_sequence",
+    ),
+    "shapes.txt":(
+        "shape_id",
         "shape_pt_lat",
         "shape_pt_lon",
-        "shape_dist_traveled",
+        "shape_pt_sequence",
     ),
 }
 
@@ -152,7 +161,11 @@ class PolishTrainsGTFS(App):
                 "directions.yaml": LocalResource("data/directions.yaml"),
                 "routes.yaml": LocalResource("data/routes.yaml"),
                 "route_extract.yaml": LocalResource("data/route_extract.yaml"),
-                "shapes.yaml": LocalResource("data/shapes.yaml"),
+                # Unused, shapes generated from OSRM
+                # "shapes.yaml": LocalResource("data/shapes.yaml"),
+                "platforms.json": HTTPResource.get(
+                    "https://kasmar00.github.io/osm-plk-platform-validator/platforms-list.json"
+                ),
             },
             tasks=[
                 LoadSchedules(),
@@ -236,8 +249,12 @@ class PolishTrainsGTFS(App):
                     ),
                     task_name="SetStopTimezone",
                 ),
-                GenerateShapes("pl_rail_map.osm", "shapes.yaml"),
-                GenerateBusShapes("pl_rail_map.osm"),
+                # Unused, shapes generated from OSRM
+                # GenerateShapes("pl_rail_map.osm", "shapes.yaml"),
+                # GenerateBusShapes("pl_rail_map.osm"),
+                LoadPlatformData(),
+                FixTransferPlatforms(),
+                AddShapes(),
                 SaveGTFS(GTFS_HEADERS, args.output, ensure_order=True),
             ],
         )

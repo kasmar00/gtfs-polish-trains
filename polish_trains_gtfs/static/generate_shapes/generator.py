@@ -1,6 +1,9 @@
 # SPDX-FileCopyrightText: 2026 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
+# Unused, shapes generated from OSRM
+
+
 import logging
 from collections.abc import Iterable
 from itertools import pairwise

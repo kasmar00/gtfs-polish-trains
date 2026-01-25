@@ -2,4 +2,6 @@ impuls ~= 2.4.1
 ijson ~= 3.4
 osmium ~= 4.3
 protobuf ~= 6.33
-routx ~= 1.0.5
+# Unused, shapes generated from OSRM
+# routx ~= 1.0.5
+polyline ~= 2.0.4
