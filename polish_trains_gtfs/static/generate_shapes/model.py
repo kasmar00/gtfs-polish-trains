@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: 2026 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
+# Unused, shapes generated from OSRM
+
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from math import nan
