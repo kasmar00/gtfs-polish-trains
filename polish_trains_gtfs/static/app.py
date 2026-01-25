@@ -18,6 +18,8 @@ from .load_schedules import LoadSchedules
 from .load_stops import LoadStops
 from .shift_negative_times import ShiftNegativeTimes
 from .split_bus_legs import SplitBusLegs
+from .load_platforms import FixTransferPlatforms, LoadPlatformData
+from .shapes import AddShapes
 
 GTFS_HEADERS = {
     "agency.txt": (
@@ -62,6 +64,7 @@ GTFS_HEADERS = {
         "stop_lon",
         "location_type",
         "parent_station",
+        "platform_code",
         "stop_timezone",
         "country",
         "plk_secondary_id",
@@ -77,7 +80,13 @@ GTFS_HEADERS = {
         "plk_category_code",
         "plk_sequence",
     ),
-    "transfers.txt": ("from_stop_id", "to_stop_id", "from_trip_id", "to_trip_id", "transfer_type"),
+    "transfers.txt": (
+        "from_stop_id",
+        "to_stop_id",
+        "from_trip_id",
+        "to_trip_id",
+        "transfer_type",
+    ),
     "trips.txt": (
         "trip_id",
         "route_id",
@@ -87,6 +96,13 @@ GTFS_HEADERS = {
         "plk_category_code",
         "plk_train_number",
         "plk_train_name",
+        "shape_id",
+    ),
+        "shapes.txt":(
+        "shape_id",
+        "shape_pt_lat",
+        "shape_pt_lon",
+        "shape_pt_sequence",
     ),
 }
 
@@ -137,6 +153,9 @@ class PolishTrainsGTFS(App):
                 "bus_routes.yaml": LocalResource("data/bus_routes.yaml"),
                 "routes.yaml": LocalResource("data/routes.yaml"),
                 "route_extract.yaml": LocalResource("data/route_extract.yaml"),
+                "platforms.json": HTTPResource.get(
+                    "https://kasmar00.github.io/osm-plk-platform-validator/platforms-list.json"
+                ),
             },
             tasks=[
                 LoadSchedules(),
@@ -195,6 +214,9 @@ class PolishTrainsGTFS(App):
                     ),
                     task_name="SetStopTimezone",
                 ),
+                LoadPlatformData(),
+                FixTransferPlatforms(),
+                AddShapes(),
                 SaveGTFS(GTFS_HEADERS, args.output, ensure_order=True),
             ],
         )

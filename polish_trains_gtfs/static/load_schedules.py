@@ -206,10 +206,20 @@ class LoadSchedules(Task):
                 "track": dep_track or arr_track,
                 "plk_category_code": get_fallback(s, "dcc", "acc", default=""),
                 "plk_sequence": str(plk_sequence),
-                "arrival_platform": arr_platform,
-                "arrival_track": arr_track,
+                "arrival_cc": s.get("acc", ""),
+                "departure_cc": s.get("dcc", ""),
+                "arrival_platform": s.get("apl", ""),
+                "departure_platform": s.get("dpl", ""),
+                "arrival_track": s.get("atr", ""),
+                "departure_track": s.get("dtr", ""),
             }
         )
+
+        aplatform = s.get("apl")
+        dplatform = s.get("dpl")
+
+        if aplatform != dplatform and None not in [aplatform, dplatform] and "BUS" not in [aplatform, dplatform]:
+            self.logger.info(f"Mismatch platform on {trip_id}: {aplatform} != {dplatform}")
 
         db.raw_execute(
             "INSERT INTO stop_times (trip_id, stop_sequence, stop_id, arrival_time, "
