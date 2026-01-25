@@ -212,11 +212,15 @@ class LoadSchedules(Task):
         dep_track = s.get("dtr", "")
 
         extra_fields: dict[str, str] = {
-            "track": dep_track or arr_track,
-            "plk_category_code": get_fallback(s, "dcc", "acc", default=""),
-            "plk_sequence": str(plk_sequence),
-            "arrival_platform": arr_platform,
-            "arrival_track": arr_track,
+                "track": dep_track or arr_track,
+                "plk_category_code": get_fallback(s, "dcc", "acc", default=""),
+                "plk_sequence": str(plk_sequence),
+                "arrival_cc": s.get("acc", ""),
+                "departure_cc": s.get("dcc", ""),
+                "arrival_platform": arr_platform,
+                "departure_platform": dep_platform,
+                "arrival_track": arr_track,
+                "departure_track": dep_track,
         }
 
         pickup_type = 0
@@ -229,6 +233,9 @@ class LoadSchedules(Task):
                 drop_off_type = 1
             elif plk_stop_type == 2:  # drop off only
                 pickup_type = 1
+
+        if arr_platform != dep_platform and "" not in [arr_platform, dep_platform] and "BUS" not in [arr_platform, dep_platform]:
+            self.logger.info(f"Mismatch platform on {trip_id}: {arr_platform} != {dep_platform}")
 
         db.raw_execute(
             "INSERT INTO stop_times (trip_id, stop_sequence, stop_id, arrival_time, "
