@@ -15,7 +15,8 @@ from .curate_routes import CurateRoutes
 from .deduplicate_consecutive_times import DeduplicateConsecutiveTimes
 from .extract_routes import ExtractRoutes
 from .fix_berlin_bus_replacement import FixBerlinBusReplacement
-from .generate_shapes import GenerateBusShapes, GenerateShapes
+# Unused, shapes generated from OSRM
+# from .generate_shapes import GenerateBusShapes, GenerateShapes
 from .load_bus_stops import LoadBusStops
 from .load_schedules import LoadSchedules
 from .load_stations import LoadStations
@@ -25,6 +26,7 @@ from .renumber_stop_times import RenumberStopTimes
 from .shift_negative_times import ShiftNegativeTimes
 from .split_bus_legs import SplitBusLegs
 from .util.apikey import get_apikey
+from .shapes import AddShapes
 
 GTFS_HEADERS = {
     "agency.txt": (
@@ -91,25 +93,30 @@ GTFS_HEADERS = {
         "plk_category_code",
         "plk_sequence",
     ),
-    "transfers.txt": ("from_stop_id", "to_stop_id", "from_trip_id", "to_trip_id", "transfer_type"),
+    "transfers.txt": (
+        "from_stop_id",
+        "to_stop_id",
+        "from_trip_id",
+        "to_trip_id",
+        "transfer_type",
+    ),
     "trips.txt": (
         "trip_id",
         "route_id",
         "service_id",
         "direction_id",
-        "shape_id",
         "trip_short_name",
         "trip_headsign",
         "plk_category_code",
         "plk_train_number",
         "plk_train_name",
-    ),
-    "shapes.txt": (
         "shape_id",
-        "shape_pt_sequence",
+    ),
+    "shapes.txt":(
+        "shape_id",
         "shape_pt_lat",
         "shape_pt_lon",
-        "shape_dist_traveled",
+        "shape_pt_sequence",
     ),
 }
 
@@ -159,7 +166,11 @@ class PolishTrainsGTFS(App):
                 "directions.yaml": LocalResource("data/directions.yaml"),
                 "routes.yaml": LocalResource("data/routes.yaml"),
                 "route_extract.yaml": LocalResource("data/route_extract.yaml"),
-                "shapes.yaml": LocalResource("data/shapes.yaml"),
+                # Unused, shapes generated from OSRM
+                # "shapes.yaml": LocalResource("data/shapes.yaml"),
+                "platforms.json": HTTPResource.get(
+                    "https://kasmar00.github.io/osm-plk-platform-validator/platforms-list.json"
+                ),
             },
             tasks=[
                 LoadSchedules(),
@@ -248,8 +259,10 @@ class PolishTrainsGTFS(App):
                     ),
                     task_name="SetStopTimezone",
                 ),
-                GenerateShapes("geo.osm", "shapes.yaml"),
-                GenerateBusShapes("geo.osm"),
+                # Unused, shapes generated from OSRM
+                # GenerateShapes("geo.osm", "shapes.yaml"),
+                # GenerateBusShapes("geo.osm"),
+                AddShapes(),
                 RemoveWaypoints(),
                 RenumberStopTimes(),
                 ExecuteSQL(
