@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"log"
 	"log/slog"
+	"path/filepath"
+	"strings"
 
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/backoff"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/fact"
@@ -23,15 +25,19 @@ var (
 	flagAlerts   = flag.Bool("alerts", false, "parse disruptions instead of operations")
 	flagGTFS     = flag.String("gtfs", "polish_trains.zip", "path to GTFS Schedule feed")
 	flagLoop     = flag.Duration("loop", 0, "when non-zero, update the feed continuously with the given period")
+	flagOutput   = flag.String("output", "polish_trains.pb", "path to output .pb file")
 	flagReadable = flag.Bool("readable", false, "dump output in human-readable format")
 	flagVerbose  = flag.Bool("verbose", false, "show DEBUG logging")
 )
+
+var jsonOutput = ""
 
 func main() {
 	flag.Parse()
 	if *flagVerbose {
 		slog.SetLogLoggerLevel(slog.LevelDebug)
 	}
+	initJsonOutput()
 
 	apikey, err := secret.FromEnvironment("PKP_PLK_APIKEY")
 	if err != nil {
@@ -122,15 +128,15 @@ func fetchUpdates(static *schedules.Package, apikey string) (*fact.Container, ma
 
 func writeOutput(facts *fact.Container) error {
 	slog.Debug("Dumping GTFS-Realtime")
-	err := facts.DumpGTFSFile("polish_trains.pb", *flagReadable)
+	err := facts.DumpGTFSFile(*flagOutput, *flagReadable)
 	if err != nil {
-		return fmt.Errorf("polish_trains.pb: %w", err)
+		return fmt.Errorf("%s: %w", *flagOutput, err)
 	}
 
 	slog.Debug("Dumping JSON")
-	err = facts.DumpJSONFile("polish_trains.json", *flagReadable)
+	err = facts.DumpJSONFile(jsonOutput, *flagReadable)
 	if err != nil {
-		return fmt.Errorf("polish_trains.json: %w", err)
+		return fmt.Errorf("%s: %w", jsonOutput, err)
 	}
 
 	return nil
@@ -145,4 +151,16 @@ func canBackoff(err error) bool {
 		}
 	}
 	return false
+}
+
+func initJsonOutput() {
+	dir, name := filepath.Split(*flagOutput)
+	parts := strings.Split(name, ".")
+	if len(parts) <= 1 {
+		parts = append(parts, "json")
+	} else {
+		parts[len(parts)-1] = "json"
+	}
+	name = strings.Join(parts, ".")
+	jsonOutput = dir + name
 }
