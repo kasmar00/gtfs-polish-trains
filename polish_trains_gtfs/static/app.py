@@ -162,7 +162,7 @@ class PolishTrainsGTFS(App):
                 ExecuteSQL(
                     statement=(
                         "UPDATE stop_times SET platform = 'BUS' "
-                        "WHERE platform = '' AND extra_fields_json ->> 'plk_category_code' = 'BUS'"
+                        "WHERE platform = '' AND json_extract(extra_fields_json, '$.plk_category_code') = 'BUS'"
                     ),
                     task_name="FixMissingBusPlatforms",
                 ),
@@ -174,7 +174,7 @@ class PolishTrainsGTFS(App):
                         "UPDATE stops SET extra_fields_json = json_set("
                         "  extra_fields_json,"
                         "  '$.stop_timezone',"
-                        "  CASE extra_fields_json ->> 'country'"
+                        "  CASE json_extract(extra_fields_json, '$.country')"
                         "    WHEN 'BY' THEN 'Europe/Minsk'"
                         "    WHEN 'LT' THEN 'Europe/Vilnius'"
                         "    WHEN 'UA' THEN 'Europe/Kyiv'"
