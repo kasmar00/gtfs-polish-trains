@@ -81,8 +81,12 @@ func (r *TimeLimitedLookupReloader) Reload(ctx context.Context, static *schedule
 	if time.Since(r.lastRun) < r.Period {
 		return nil
 	}
-	r.lastRun = time.Now()
-	return r.Wrapped.Reload(ctx, static, apikey, client)
+	startTime := time.Now()
+	err := r.Wrapped.Reload(ctx, static, apikey, client)
+	if err == nil {
+		r.lastRun = startTime
+	}
+	return err
 }
 
 func CarrierCodeToAgencyID(cc string) string {
