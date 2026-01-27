@@ -49,6 +49,7 @@ class SplitBusLegs(SplitTripLegs):
 
     def update_bus_replacement_route(self, route: Route) -> None:
         route.type = Route.Type.BUS
+        route.set_extra_field("extended_type", "3")
 
         # Try to match route with one of the curated ones
         for curated_route in self.curated_routes:
