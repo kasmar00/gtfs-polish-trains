@@ -173,7 +173,18 @@ class CurateRoutes(Task):
                 data["long_name"],
                 color,
                 text_color,
-                data.get("type", 2),
+                2,
+            ),
+        )
+        db.raw_execute(
+            """
+            UPDATE routes
+            SET extra_fields_json = json_object('extended_type', ?)
+            WHERE route_id = ?
+            """,
+            (
+                data.get("type", 106),
+                data["id"],
             ),
         )
 

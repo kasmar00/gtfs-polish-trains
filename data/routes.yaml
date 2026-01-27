@@ -20,36 +20,43 @@ agencies:
         short_name: "EIP"
         long_name: "Express InterCity Premium"
         color: "002664"
+        type: 101
       - id: "IC_EIC"
         match: [{short_name: "*EIC*"}]
         short_name: "EIC"
         long_name: "Express InterCity"
         color: "898989"
+        type: 102
       - id: "IC_IC"
         match: [{short_name: "*IC*"}]
         short_name: "IC"
         long_name: "InterCity"
         color: "F25E18"
+        type: 102
       - id: "IC_TLK"
         match: [{short_name: "*TLK*"}]
         short_name: "TLK"
         long_name: "Twoje Linie Kolejowe"
         color: "8505A3"
+        type: 102
       - id: "IC_EN"
         match: [{short_name: "*EN*"}]
         short_name: "EN"
         long_name: "EuroNight"
         color: "000000"
+        type: 105
       - id: "IC_EC"
         match: [{short_name: "*EC*"}]
         short_name: "EC"
         long_name: "EuroCity"
         color: "9D740F"
+        type: 102
       - id: "IC_MP"
         match: [{short_name: "*MP*"}]
         short_name: "MP"
         long_name: "Międzynarodowy Pospieszny"
         color: "4F4F4F"
+        type: 102
 
   - id: "KD"
     name: "Koleje Dolnośląskie"
@@ -295,59 +302,73 @@ agencies:
         short_name: "RE1"
         long_name: "Warszawa — Skierniewice (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE2"
         short_name: "RE2"
         long_name: "Warszawa — Łuków (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE21"
         short_name: "RE21"
         long_name: "Warszawa — Czeremcha (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE3"
         short_name: "RE3"
         long_name: "Warszawa — Kutno (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE31"
         short_name: "RE31"
         long_name: "Warszawa — Płock (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE6"
         short_name: "RE6"
         long_name: "Warszawa — Małkinia (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE61"
         short_name: "RE61"
         long_name: "Warszawa — Ostrołęka (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE7"
         short_name: "RE7"
         long_name: "Warszawa — Dęblin (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE8"
         short_name: "RE8"
         long_name: "Warszawa — Skarżysko-Kamienna (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE80"
         short_name: "RE80"
         long_name: "Warszawa — Skarżysko-Kamienna (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE9"
         short_name: "RE9"
         long_name: "Warszawa — Działdowo (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE90"
         short_name: "RE90"
         long_name: "Warszawa — Działdowo (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE91"
         short_name: "RE91"
         long_name: "Tłuszcz → Sierpc (Przyspieszony)"
         color: "005A00"
+        type: 103
       - id: "KM_RE92"
         match: [{short_name: "RE92"}]
         short_name: "RE92"
         long_name: "Sierpc → Tłuszcz (Przyspieszony)"
         color: "005A00"
+        type: 103
       # Other
       - id: "KM_RL"
         match: [{short_name: "RL"}]
@@ -393,6 +414,7 @@ agencies:
         short_name: "K71P"
         long_name: "Jasło — Gorlice — Stróże (Przyspieszony)"
         color: "28235B"
+        type: 103
       - id: "KML_K71"
         match: [{short_name: "*K71*"}]
         short_name: "K71"
@@ -404,11 +426,13 @@ agencies:
         short_name: "K5P"
         long_name: "Kraków Główny — Skawina — Sucha Beskidzka — Zakopane (Przyspieszony)"
         color: "F29EC4"
+        type: 103
       - id: "KML_K7P"
         match: [{short_name: "*K7P*"}]
         short_name: "K7P"
         long_name: "Kraków Główny — Tarnów — Nowy Sącz — Krynica-Zdrój (Przyspieszony)"
         color: "008C36"
+        type: 103
       # K? routes
       - id: "KML_K5"
         match: [{short_name: "*K5*"}]
@@ -577,6 +601,7 @@ agencies:
         short_name: "KW P"
         long_name: "Koleje Wielkopolskie - Pospieszny"
         color: "C70003"
+        type: 103
       - id: "KW"
         match: [{}]
         short_name: "KW"
@@ -593,6 +618,7 @@ agencies:
         short_name: "LEO"
         long_name: "Leo Express"
         color: "F08200"
+        type: 102
 
   - id: "LKA"
     name: "Łódzka Kolej Aglomeracyjna"
@@ -604,11 +630,13 @@ agencies:
         short_name: "ŁKA S"
         long_name: "Łódzka Kolej Aglomeracyjna - Sprinter"
         color: "E4010B"
+        type: 102
       - id: "LKA_LP"
         match: [{short_name: "*ŁP*"}]
         short_name: "ŁKA P"
         long_name: "Łódzka Kolej Aglomeracyjna - Przyspieszony"
         color: "E4010B"
+        type: 103
       - id: "LKA"
         match: [{}]
         short_name: "ŁKA"
@@ -669,11 +697,13 @@ agencies:
         short_name: "K33P"
         long_name: "Kraków Główny — Olkusz — Wolbrom (Przyspieszony)"
         color: "951A80"
+        type: 103
       - id: "PR_K52P"
         match: [{short_name: "*K52P*"}]
         short_name: "K52P"
         long_name: "Kraków Główny — Wadowice — Bielsko-Biała (Przyspieszony)"
         color: "BD1621"
+        type: 103
       # K?? routes
       - id: "PR_K22"
         match: [{short_name: "*K22*"}]
@@ -716,11 +746,13 @@ agencies:
         short_name: "K3P"
         long_name: "Katowice — Kraków Główny — Rzeszów (Przyspieszony)"
         color: "E84D0F"
+        type: 103
       - id: "PR_K7P"
         match: [{short_name: "*K7P*"}]
         short_name: "K7P"
         long_name: "Kraków Główny — Tarnów — Nowy Sącz — Krynica-Zdrój (Przyspieszony)"
         color: "008C36"
+        type: 103
       # K? routes
       - id: "PR_K2"
         match: [{short_name: "*K2*"}]
@@ -748,11 +780,13 @@ agencies:
         short_name: "IR"
         long_name: "interREGIO"
         color: "E50000"
+        type: 103
       - id: "PR_RP"
         match: [{id: "*RP*"}]
         short_name: "REG P"
         long_name: "PolRegio - Przyspieszony"
         color: "E50000"
+        type: 103
       - id: "PR_REG"
         match: [{}]
         short_name: "REG"
@@ -769,6 +803,7 @@ agencies:
         short_name: "RJ"
         long_name: "RegioJet"
         color: "FABB00"
+        type: 102 #but also some are night...
 
   - id: "SKM"
     name: "SKM Warszawa"
@@ -779,23 +814,28 @@ agencies:
         short_name: "S1"
         long_name: "Pruszków — Otwock"
         color: "E84A4B"
+        type: 109
       - id: "SKM_S2"
         short_name: "S2"
         long_name: "Warszawa Lotnisko Chopina — Sulejówek Miłosna"
         color: "2E8EC8"
+        type: 109
       - id: "SKM_S3"
         short_name: "S3"
         long_name: "Warszawa Lotnisko Chopina — Legionowo"
         color: "FFAD01"
+        type: 109
       - id: "SKM_S4"
         match: [{id: "SKM_S4/S40"}]
         short_name: "S4"
         long_name: "Piaseczno — Wieliszew (— Zegrze Południowe)"
         color: "2F7B20"
+        type: 109
       - id: "SKM_S40"
         short_name: "S40"
         long_name: "Piaseczno — Wieliszew — Radzymin"
         color: "70AD46"
+        type: 109
 
   - id: "SKMT"
     name: "PKP SKM Trójmiasto"
@@ -806,7 +846,9 @@ agencies:
         short_name: "S50"
         long_name: "Gdańsk Główny — Gdańsk Stadion Expo"
         color: "008AD0"
+        type: 109
       - id: "SKMT_S1"
         short_name: "S1"
         long_name: "Gdańsk Śródmieście — Gdynia Cisowa (— Wejherowo — Lębork)"
         color: "008AD0"
+        type: 109

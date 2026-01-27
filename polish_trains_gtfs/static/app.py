@@ -20,6 +20,7 @@ from .shift_negative_times import ShiftNegativeTimes
 from .split_bus_legs import SplitBusLegs
 from .load_platforms import FixTransferPlatforms, LoadPlatformData
 from .shapes import AddShapes
+from .extended_route_types import ApplyExtendedRouteTypes
 
 GTFS_HEADERS = {
     "agency.txt": (
@@ -217,6 +218,7 @@ class PolishTrainsGTFS(App):
                 LoadPlatformData(),
                 FixTransferPlatforms(),
                 AddShapes(),
+                ApplyExtendedRouteTypes(),
                 SaveGTFS(GTFS_HEADERS, args.output, ensure_order=True),
             ],
         )
