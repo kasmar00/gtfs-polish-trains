@@ -163,6 +163,8 @@ class CurateRoutes(Task):
             color = ""
             text_color = ""
 
+        route_type = data.get("type", 2)
+
         db.raw_execute(
             "INSERT INTO routes (route_id, agency_id, short_name, long_name, color, "
             "text_color, type) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT (route_id) DO "
@@ -175,7 +177,18 @@ class CurateRoutes(Task):
                 data["long_name"],
                 color,
                 text_color,
-                data.get("type", 2),
+                2 if route_type > 100 else route_type,
+            ),
+        )
+        db.raw_execute(
+            """
+            UPDATE routes
+            SET extra_fields_json = json_object('extended_type', ?)
+            WHERE route_id = ?
+            """,
+            (
+                data.get("type", 106),
+                data["id"],
             ),
         )
 
