@@ -26,6 +26,7 @@ from .shift_negative_times import ShiftNegativeTimes
 from .split_bus_legs import SplitBusLegs
 from .util.apikey import get_apikey
 from .shapes import AddShapes
+from .extended_route_types import ApplyExtendedRouteTypes
 
 GTFS_HEADERS = {
     "agency.txt": (
@@ -277,6 +278,7 @@ class PolishTrainsGTFS(App):
                     ),
                     task_name="SetNoPickupAtLastStops",
                 ),
+                ApplyExtendedRouteTypes(),
                 SaveGTFS(GTFS_HEADERS, args.output, ensure_order=True),
             ],
         )
