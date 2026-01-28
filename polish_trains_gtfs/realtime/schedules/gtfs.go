@@ -227,6 +227,10 @@ func LoadGTFSStops(stops io.Reader) (map[string]string, error) {
 		canonicalIDs[secondaryID] = canonicalIDs[stationID]
 	}
 
+	// HOTFIX: The API reports W-wa Zachodnia Peron 9 the same as Warszawa Zachodnia,
+	// no normalize P9 ID to the standard one
+	canonicalIDs["34868"] = "33506"
+
 	return canonicalIDs, nil
 }
 

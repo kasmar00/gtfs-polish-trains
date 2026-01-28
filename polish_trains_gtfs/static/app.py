@@ -5,8 +5,8 @@ from argparse import ArgumentParser, Namespace
 from typing import cast
 
 from impuls import App, HTTPResource, LocalResource, Pipeline, PipelineOptions
-from impuls.model import Date
-from impuls.tasks import ExecuteSQL, GenerateTripHeadsign, RemoveUnusedEntities, SaveGTFS
+from impuls.model import Date, Stop
+from impuls.tasks import AddEntity, ExecuteSQL, GenerateTripHeadsign, RemoveUnusedEntities, SaveGTFS
 
 from ..apikey import get_apikey
 from . import external
@@ -146,6 +146,17 @@ class PolishTrainsGTFS(App):
                     task_name="DropWKD",
                 ),
                 RemoveUnusedEntities(),
+                AddEntity(
+                    entity=Stop("34868", "Warszawa Zachodnia (Peron 9)", 0, 0),
+                    task_name="AddWarszawaZachodniaPeron9Stop",
+                ),
+                ExecuteSQL(
+                    statement=(
+                        "UPDATE stop_times SET stop_id = '34868' "
+                        "WHERE stop_id = '33506' AND platform = '9'"
+                    ),
+                    task_name="MoveDeparturesToWarszawaZachodniaPeron9",
+                ),
                 ExtractRoutes(),
                 CurateRoutes(),
                 LoadStops(),
