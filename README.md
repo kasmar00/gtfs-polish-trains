@@ -1,9 +1,6 @@
 PolishTrainsGTFS
 ================
 
-> ⚠️🏗️ This project is still under construction. While the static generator works,
-> and is mostly production-ready; the realtime generator is WIP and probably does not work.
-
 Creates a single, GTFS and GTFS-Realtime feeds for all Polish trains coordinated by [PKP PLK](https://www.plk-sa.pl/)
 (this excludes [WKD](https://wkd.com.pl/) or [UBB](https://www.ubb-online.com/)), including:
 
@@ -37,6 +34,24 @@ Data Caveats
 - International trains are kinda messed up. Bus replacement services are sometimes missing
     (and remain as trains). Sometimes, only partial routes are available (OEDG, NEB). Rarely,
     the agency is also incorrect (NEB trains to/from Kostrzyn are reported as operated by PolRegio).
+
+
+Realtime Caveats
+----------------
+
+- The static `trip_id` is not particularly stable.
+- Prefer JSON to GTFS-Realtime, as it exposes a little bit more data.
+- Use a backup matching strategy on `agency_id`+`number`+`start_date`, in case the standard `trip_id`+`start_date` combination fails to match.
+- `platform` and `track` in updates.json is simply copied over from static data,
+    and does not reflect changes in platform assignment. PKP PLK's API doesn't have live platform and track data.
+    Those fields are provided solely for convenience of some end-user applications.
+- PKP PLK seemingly updates their live data every couple of minutes, there's a noticeable propagation delay
+    from a train actually being disrupted to this being reflected in the feed.
+- When running continuously, the upstream API can sometimes start returning `429 Too Many Requests` for over an hour.
+    This seems to be caused by pointless pagination and an undocumented rate limit.
+- Alerts are still work-in-progress.
+- Live vehicle positions (fetched directly from agencies) are technically feasible,
+    and may be available sometime in the future.
 
 
 Running
