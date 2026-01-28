@@ -72,6 +72,8 @@ type StopTime struct {
 	StopID       string
 	GTFSSequence int
 	PLKSequence  int
+	Platform     string
+	Track        string
 }
 
 type Package struct {

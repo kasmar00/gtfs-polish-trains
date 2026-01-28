@@ -152,6 +152,8 @@ func (a *Alert) AsGTFS() *gtfs.FeedEntity {
 type TripUpdate struct {
 	ID string `json:"id"`
 	TripSelector
+	AgencyID  string            `json:"agency_id,omitempty"`
+	Numbers   []string          `json:"numbers,omitempty"`
 	StopTimes []*StopTimeUpdate `json:"stop_times,omitempty"`
 	Cancelled bool              `json:"cancelled,omitempty"`
 	Detour    bool              `json:"detour,omitempty"`
@@ -187,6 +189,8 @@ type StopTimeUpdate struct {
 	Departure time.Time `json:"departure,omitzero"`
 	Cancelled bool      `json:"cancelled,omitempty"`
 	Confirmed bool      `json:"confirmed,omitempty"`
+	Platform  string    `json:"platform,omitempty"`
+	Track     string    `json:"track,omitempty"`
 }
 
 func (s *StopTimeUpdate) AsGTFS() *gtfs.TripUpdate_StopTimeUpdate {

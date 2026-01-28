@@ -51,11 +51,8 @@ func TripUpdate(real *source.OperationTrain, static *schedules.Package, stats *S
 	if isEntireTripCancelled(real) {
 		updates := make([]*fact.TripUpdate, len(tripIDs))
 		for i, tripID := range tripIDs {
-			updates[i] = &fact.TripUpdate{
-				ID:           fmt.Sprintf("U_%s_%s", trip.GTFSStartDate, tripID),
-				TripSelector: fact.TripSelector{TripID: tripID, GTFSStartDate: trip.GTFSStartDate},
-				Cancelled:    true,
-			}
+			updates[i] = newTripUpdate(trip, tripID)
+			updates[i].Cancelled = true
 		}
 		return updates
 	}
@@ -65,9 +62,7 @@ func TripUpdate(real *source.OperationTrain, static *schedules.Package, stats *S
 	if isOnDetour(real, trip, static.Stops) {
 		updates := make([]*fact.TripUpdate, len(tripIDs))
 		for i, tripID := range tripIDs {
-			updates[i] = new(fact.TripUpdate)
-			updates[i].ID = fmt.Sprintf("U_%s_%s", trip.GTFSStartDate, tripID)
-			updates[i].TripSelector = fact.TripSelector{TripID: tripID, GTFSStartDate: trip.GTFSStartDate}
+			updates[i] = newTripUpdate(trip, tripID)
 
 			if i == 0 {
 				updates[i].Detour = true
@@ -89,10 +84,7 @@ func TripUpdate(real *source.OperationTrain, static *schedules.Package, stats *S
 	updates := make([]*fact.TripUpdate, len(tripIDs))
 	for i, tripID := range tripIDs {
 		updateIndexByTripID[tripID] = i
-		updates[i] = &fact.TripUpdate{
-			ID:           fmt.Sprintf("U_%s_%s", trip.GTFSStartDate, tripID),
-			TripSelector: fact.TripSelector{TripID: tripID, GTFSStartDate: trip.GTFSStartDate},
-		}
+		updates[i] = newTripUpdate(trip, tripID)
 	}
 
 	// Generate stop-time updates
@@ -114,6 +106,8 @@ func TripUpdate(real *source.OperationTrain, static *schedules.Package, stats *S
 			update.Confirmed = realUpdate.Confirmed
 			update.Arrival = time.Time(realUpdate.LiveArrival)
 			update.Departure = time.Time(realUpdate.LiveDeparture)
+			update.Platform = st.Platform
+			update.Track = st.Track
 		}
 		updates[i].StopTimes = append(updates[i].StopTimes, update)
 	}
@@ -185,4 +179,13 @@ func getDetourStopTimeUpdates(stops []*source.OperationTrainStop, canonicalStops
 	}
 
 	return updates
+}
+
+func newTripUpdate(t *schedules.Trip, tripID string) *fact.TripUpdate {
+	return &fact.TripUpdate{
+		ID:           fmt.Sprintf("U_%s_%s", t.GTFSStartDate, tripID),
+		TripSelector: fact.TripSelector{TripID: tripID, GTFSStartDate: t.GTFSStartDate},
+		AgencyID:     t.AgencyID,
+		Numbers:      t.Numbers,
+	}
 }

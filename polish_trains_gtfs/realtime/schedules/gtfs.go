@@ -409,6 +409,10 @@ func LoadGTFSStopTimes(stopTimes io.Reader, tripIDs map[string][]TripID, tripObj
 			return ErrGTFSInvalidValue{"stop_times.txt", "plk_sequence", r.Line(), err}
 		}
 
+		// Parse other attributes
+		st.Platform = row["platform"]
+		st.Track = row["track"]
+
 		// Save the stop_time to all possible trips
 		for _, tripID := range tripIDs[st.GTFSTripID] {
 			tripObjects[tripID].StopTimes = append(tripObjects[tripID].StopTimes, st)
