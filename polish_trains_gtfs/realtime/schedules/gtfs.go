@@ -197,7 +197,7 @@ func LoadGTFSStops(stops io.Reader) (map[string]string, error) {
 			return nil, ErrGTFSInvalidValue{"stops.txt", "stop_id", r.Line(), nil}
 		}
 
-		stationID, _, _ := strings.Cut(stopID, "_")
+		stationID, _, _ := strings.Cut(stopID, "_") // station id == stop without platform id, usefull for diversions (when platform is not known)
 		allIDs[stationID] = append(allIDs[stationID], stopID)
 
 		secondaryID := row["plk_secondary_id"]
@@ -235,7 +235,8 @@ func LoadGTFSStops(stops io.Reader) (map[string]string, error) {
 }
 
 func pickCanonicalStopID(used []string) string {
-	return slices.MaxFunc(used, func(a, b string) int { return cmp.Compare(rankStopID(a), rankStopID(b)) })
+	return strings.Split(used[0], "_")[0]
+	// return slices.MaxFunc(used, func(a, b string) int { return cmp.Compare(rankStopID(a), rankStopID(b)) })
 }
 
 func rankStopID(id string) int {
