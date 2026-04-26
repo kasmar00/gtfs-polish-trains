@@ -61,7 +61,9 @@ class LoadPlatformData(impuls.Task):
             stop_with_platform_id = f"{stop_id}_{platform_number}_{track}"
             platforms_for_station = platforms.get(slug(str(name)), [])
             if len(platforms_for_station) == 0:
-                self.logger.warning(f"Station not found {name}")
+                self.logger.warning(
+                    f"Station not found {name} when searching by slug: {slug(str(name))}"
+                )
                 continue
             platforms_for_platform_number = [
                 p for p in platforms_for_station if p.get("platform") == platform_number
@@ -194,5 +196,5 @@ TRANSLATION_TABLE = str.maketrans(
 
 
 def slug(s: str) -> str:
-    text = s.translate(TRANSLATION_TABLE)
-    return re.sub(r"[ -]+", "-", re.sub(r"[^\x00-\x7F]+", "", text)).lower()
+    text = s.translate(TRANSLATION_TABLE).replace("(", "").replace(")", "")
+    return re.sub(r"[ \-\(\)]+", "-", re.sub(r"[^\x00-\x7F]+", "", text)).lower()
