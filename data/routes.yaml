@@ -226,11 +226,13 @@ agencies:
         short_name: "KD Sprinter"
         long_name: "Koleje Dolnośląskie - Sprinter"
         color: "F8CC00"
+        type: 103
 
       - id: "KD_P"
         short_name: "KD Premium"
         long_name: "Koleje Dolnośląskie - Premium"
         color: "F8CC00"
+        type: 102
 
       - id: "KD"
         match: [{}]
