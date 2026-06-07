@@ -181,6 +181,7 @@ func LoadGTFSFeedDates(feedInfo io.Reader) (d FeedDates, err error) {
 	if err != nil {
 		return FeedDates{}, ErrGTFSInvalidValue{"feed_info.txt", "feed_end_date", 2, err}
 	}
+	d.End = d.Start.Next().Next().Next()
 
 	return
 }
