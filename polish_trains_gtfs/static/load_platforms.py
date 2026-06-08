@@ -17,6 +17,13 @@ class LoadPlatformData(impuls.Task):
         return platforms
 
     def execute(self, r: impuls.TaskRuntime) -> None:
+        r.db.raw_execute(
+            """
+        CREATE INDEX IF NOT EXISTS stop_times_platform
+        ON stop_times 
+        (stop_id, platform, json_extract(extra_fields_json, '$.track'))
+"""
+        )
         platforms_in_db = r.db.raw_execute(
             """
         SELECT DISTINCT name, stop_id, platform, json_extract(stop_times.extra_fields_json, '$.track') AS track
