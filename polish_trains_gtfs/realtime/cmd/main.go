@@ -21,10 +21,8 @@ import (
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/schedules"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/source"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/client"
+	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/metrics"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/secret"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/collectors"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
@@ -55,6 +53,10 @@ func main() {
 	initClientPool()
 	defer clientPool.Close()
 
+	if *flagLoop != 0 {
+		metrics.InitializePrometheusServer()
+	}
+
 	slog.Info("Loading static schedules")
 	static, err := schedules.LoadGTFSFromPath(*flagGTFS)
 	if err != nil {
@@ -75,14 +77,6 @@ func main() {
 		}
 		slog.Info("Feed updated successfully", "facts", totalFacts, "stats", stats)
 	} else {
-		reg := prometheus.NewRegistry()
-		reg.MustRegister(
-			collectors.NewGoCollector(),
-			collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
-		)
-		http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
-		http.ListenAndServe(":2112", nil)
-
 		b := backoff.Backoff{
 			Period:                 *flagLoop,
 			ExponentialBackoffBase: 30 * time.Second,
@@ -100,6 +94,7 @@ func main() {
 			} else {
 				b.EndRun(backoff.Success)
 				slog.Info("Feed updated successfully", "facts", totalFacts, "stats", stats)
+				metrics.RecordMatchStats(stats.Matched, stats.Unmatched, stats.OutsideFeedDates)
 			}
 		}
 	}
