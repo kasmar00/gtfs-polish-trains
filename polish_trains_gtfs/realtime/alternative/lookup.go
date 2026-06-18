@@ -12,6 +12,7 @@ import (
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/schedules"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/source"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/http2"
+	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/metrics"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/time2"
 )
 
@@ -67,6 +68,11 @@ func (UnconditionalLookupReloader) Reload(ctx context.Context, static *schedules
 			static.AlternativeTripLookup[tripID] = numberID
 		}
 	}
+
+	metrics.Metrics.LookupAlternativeTripSize.Set(float64(len(static.AlternativeTripLookup)))
+	metrics.Metrics.LookupStopsSize.Set(float64(len(static.Stops)))
+	metrics.Metrics.LookupTripsSize.Set(float64(len(static.Trips)))
+	metrics.Metrics.LookupTripsByNumberSize.Set(float64(len(static.TripsByNumber)))
 
 	return nil
 }
