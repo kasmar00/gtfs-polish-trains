@@ -30,9 +30,15 @@ func Alerts(real *source.Disruptions, static *schedules.Package, stats *Stats) *
 func Alert(real *source.Disruption, static *schedules.Package, stats *Stats, disruptionTypes map[string]string) *fact.Alert {
 	// Try to match the trains
 	trips := make([]fact.TripSelector, 0, len(real.AffectedTrains))
+	seen := make(map[fact.TripSelector]struct{})
 	for _, train := range real.AffectedTrains {
 		selectors := TripSelectors(train.TrainID, static)
-		trips = append(trips, selectors...)
+		for _, s := range selectors {
+			if _, ok := seen[s]; !ok {
+				seen[s] = struct{}{}
+				trips = append(trips, s)
+			}
+		}
 
 		if stats != nil {
 			if len(selectors) > 0 {
