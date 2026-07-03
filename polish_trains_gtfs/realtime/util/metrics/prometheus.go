@@ -36,6 +36,8 @@ type metrics struct {
 	LookupTripsSize           prometheus.Gauge
 	LookupTripsByNumberSize   prometheus.Gauge
 	MatchStats                *prometheus.GaugeVec
+	// FeedStartDate             prometheus.Gauge
+	// FeedEndDate               prometheus.Gauge
 }
 
 var Metrics metrics
@@ -62,6 +64,12 @@ func newMetrics(reg prometheus.Registerer) *metrics {
 			Name: "polish_trains_gtfs_realtime_match_stats",
 			Help: "Stats of the latest match with RT data",
 		}, []string{"result"}),
+		// FeedStartDate: promauto.With(reg).NewGauge(prometheus.GaugeOpts{
+		// 	Name: "polish_trains_gtfs_static_start_date_timestamp",
+		// }),
+		// FeedEndDate: promauto.With(reg).NewGauge(prometheus.GaugeOpts{
+		// 	Name: "polish_trains_gtfs_static_end_date_timestamp",
+		// }),
 	}
 	return m
 }
