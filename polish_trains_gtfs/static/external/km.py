@@ -63,9 +63,9 @@ class LoadKM(LoadExternal):
             (trip_id, calendar_id, t.numbers[0]),
         )
         db.raw_execute_many(
-            "INSERT INTO stop_times (trip_id,stop_sequence,stop_id,arrival_time,departure_time) "
-            "VALUES (?, ?, ?, ?, ?)",
-            ((trip_id, idx, i.id, i.arrival, i.departure) for idx, i in enumerate(t.stop_times)),
+            "INSERT INTO stop_times (trip_id,stop_sequence,stop_id,arrival_time,departure_time, platform) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            ((trip_id, idx, i.id, i.arrival, i.departure, "BUS") for idx, i in enumerate(t.stop_times)),
         )
 
     def insert_static_objects(self, db: DBConnection, fetch_time: datetime) -> None:
