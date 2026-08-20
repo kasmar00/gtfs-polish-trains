@@ -17,6 +17,7 @@ class LoadPlatformData(impuls.Task):
         return platforms
 
     def execute(self, r: impuls.TaskRuntime) -> None:
+        r.db.begin()
         platforms_in_db = r.db.raw_execute(
             """
         SELECT DISTINCT name, stop_id, platform, json_extract(stop_times.extra_fields_json, '$.track') AS track
@@ -124,6 +125,7 @@ class LoadPlatformData(impuls.Task):
                 """,
                 (stop_with_platform_id, stop_id, platform_number, track),
             )
+        r.db.commit()
 
     def _ensure_parent_station(
         self, r: impuls.TaskRuntime, stop_id: str
