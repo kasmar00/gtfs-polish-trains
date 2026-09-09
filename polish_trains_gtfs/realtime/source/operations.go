@@ -21,7 +21,14 @@ const DefaultPageSize = 10_000
 const DefaultMaxPages = 5
 const DefaultFetchSpacing = 100 * time.Millisecond
 
+var dataVersion = ""
+
+type DataVersion struct {
+	OperationsVersion string `json:"operationsVersion"`
+}
+
 var ErrTooManyPages = errors.New("fetching operations takes too many pages")
+var ErrNoNewDataVersion = errors.New("fetching operations whould have no new data")
 
 type Operations struct {
 	Timestamp time.Time         `json:"ts"`
@@ -61,6 +68,16 @@ func FetchOperations(ctx context.Context, apikey string, client http2.Doer, opti
 	var all *Operations
 	cacheBuster := time.Now().Unix()
 
+	var dv *DataVersion
+	dv, err := FetchDataVersion(ctx, apikey, client)
+	if err != nil {
+		return nil, err
+	}
+	if dv.OperationsVersion == dataVersion {
+		return nil, ErrNoNewDataVersion
+	}
+	dataVersion = dv.OperationsVersion
+
 	for page := 1; page <= options.MaxPages; page++ {
 		slog.Debug("Fetching operations", "page", page)
 		o, err := FetchOperationsPage(ctx, apikey, client, page, options.PageSize, cacheBuster)
@@ -87,6 +104,16 @@ func FetchOperations(ctx context.Context, apikey string, client http2.Doer, opti
 		}
 	}
 	return nil, ErrTooManyPages
+}
+
+func FetchDataVersion(ctx context.Context, apikey string, client http2.Doer) (o *DataVersion, err error) {
+	req, err := http.NewRequestWithContext(ctx, "GET", "https://pdp-api.plk-sa.pl/api/v1/data-version", nil)
+	if err != nil {
+		return
+	}
+	req.Header.Set("X-Api-Key", apikey)
+
+	return http2.GetJSON[DataVersion](client, req)
 }
 
 func FetchOperationsPage(ctx context.Context, apikey string, client http2.Doer, page, pageSize int, cacheBuster int64) (o *Operations, err error) {

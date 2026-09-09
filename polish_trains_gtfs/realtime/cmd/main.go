@@ -95,10 +95,13 @@ func main() {
 				if canRetry(err) {
 					nextTry := b.EndRun(backoff.Retry)
 					slog.Error("Feed update failure", "error", err, "next_try", nextTry)
+					// TODO: dodać tutaj inny backoff, tak za 10 sekund np.
 				} else if canBackoff(err) {
 					clientPool.BackoffLast()
 					nextTry := b.EndRun(backoff.Failure)
 					slog.Error("Feed update failure", "error", err, "next_try", nextTry)
+				} else if false {
+					// tutaj dać tego ifa i backoff
 				} else {
 					log.Fatalf("Fatal error during run: %s (%#v)", err, err)
 				}
@@ -215,7 +218,8 @@ func canRetry(err error) bool {
 	str := err.Error()
 	return (errors.Is(err, syscall.ECONNRESET) ||
 		errors.Is(err, os.ErrDeadlineExceeded) ||
-		strings.Contains(str, "connection reset by peer"))
+		strings.Contains(str, "connection reset by peer")) ||
+		errors.Is(err, source.ErrNoNewDataVersion)
 }
 
 func canBackoff(err error) bool {
