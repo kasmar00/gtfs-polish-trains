@@ -64257,7 +64257,7 @@
     <tag k="ref:station" v="14407"/>
   </node>
   <node id="46870" action="modify" lat="53.14107193671" lon="17.60079502523" version="1"/>
-  <node id="46871" action="modify" lat="53.13938254642" lon="17.59353159785" version="1"/>
+  <node id="46871" action="modify" lat="53.1393696746" lon="17.59357451319" version="1"/>
   <node id="46872" action="modify" lat="53.1386617183" lon="17.58960484385" version="1"/>
   <node id="46873" action="modify" lat="53.13788938904" lon="17.5849163425" version="1"/>
   <node id="46874" action="modify" lat="53.13722002578" lon="17.57962702632" version="1"/>
@@ -90486,6 +90486,551 @@
   <node id="70562" action="modify" lat="52.26909954193" lon="21.03500157326" version="1"/>
   <node id="70563" action="modify" lat="52.26875156638" lon="21.03577673167" version="1"/>
   <node id="70564" action="modify" lat="52.26838717397" lon="21.03672623366" version="1"/>
+  <node id="70565" action="modify" lat="52.94881323322" lon="17.31181785397" version="1"/>
+  <node id="70566" action="modify" lat="52.95017801505" lon="17.31799900264" version="1"/>
+  <node id="70567" action="modify" lat="52.95185383241" lon="17.32559233636" version="1"/>
+  <node id="70568" action="modify" lat="52.95305126675" lon="17.33101308078" version="1"/>
+  <node id="70569" action="modify" lat="52.95343586076" lon="17.33258753747" version="1"/>
+  <node id="70570" action="modify" lat="52.95368471388" lon="17.33335733145" version="1"/>
+  <node id="70571" action="modify" lat="52.95404829542" lon="17.33437388867" version="1"/>
+  <node id="70572" action="modify" lat="52.95610530139" lon="17.33897387713" version="1"/>
+  <node id="70573" action="modify" lat="52.95828349952" lon="17.34377493737" version="1"/>
+  <node id="70574" action="modify" lat="52.95896358682" lon="17.34529133403" version="1"/>
+  <node id="70575" action="modify" lat="52.96122139993" lon="17.35026834753" version="1"/>
+  <node id="70576" action="modify" lat="52.96217631775" lon="17.35238369711" version="1"/>
+  <node id="70577" action="modify" lat="52.96273465573" lon="17.35371470358" version="1"/>
+  <node id="70578" action="modify" lat="52.96293794623" lon="17.35425423656" version="1"/>
+  <node id="70579" action="modify" lat="52.96342755745" lon="17.35568982212" version="1"/>
+  <node id="70580" action="modify" lat="52.96388137342" lon="17.3571848276" version="1"/>
+  <node id="70581" action="modify" lat="52.9642750585" lon="17.35869409387" version="1"/>
+  <node id="70582" action="modify" lat="52.96456709894" lon="17.35992527486" version="1"/>
+  <node id="70583" action="modify" lat="52.9650795965" lon="17.36231633292" version="1"/>
+  <node id="70584" action="modify" lat="52.96592849669" lon="17.36617149811" version="1"/>
+  <node id="70585" action="modify" lat="52.96719823702" lon="17.37191621712" version="1"/>
+  <node id="70586" action="modify" lat="52.96800912968" lon="17.37567722529" version="1"/>
+  <node id="70587" action="modify" lat="52.96926830662" lon="17.38141447172" version="1"/>
+  <node id="70588" action="modify" lat="52.97122848099" lon="17.39019602269" version="1"/>
+  <node id="70589" action="modify" lat="52.97282110703" lon="17.39730387658" version="1"/>
+  <node id="70590" action="modify" lat="52.97290671306" lon="17.39764451712" version="1"/>
+  <node id="70591" action="modify" lat="52.97497412784" lon="17.4051949355" version="1"/>
+  <node id="70592" action="modify" lat="52.97628559282" lon="17.40999340743" version="1"/>
+  <node id="70593" action="modify" lat="52.97849981259" lon="17.41808831155" version="1"/>
+  <node id="70594" action="modify" lat="52.97870330178" lon="17.41891979635" version="1"/>
+  <node id="70595" action="modify" lat="52.97886803042" lon="17.42002486646" version="1"/>
+  <node id="70596" action="modify" lat="52.9789164799" lon="17.42067396104" version="1"/>
+  <node id="70597" action="modify" lat="52.97893585968" lon="17.42139279306" version="1"/>
+  <node id="70598" action="modify" lat="52.97886803042" lon="17.42257296503" version="1"/>
+  <node id="70599" action="modify" lat="52.97869684182" lon="17.42429494321" version="1"/>
+  <node id="70600" action="modify" lat="52.97761478495" lon="17.43584453523" version="1"/>
+  <node id="70601" action="modify" lat="52.97698814859" lon="17.44247495592" version="1"/>
+  <node id="70602" action="modify" lat="52.9768815549" lon="17.44385897577" version="1"/>
+  <node id="70603" action="modify" lat="52.97684279349" lon="17.44499623239" version="1"/>
+  <node id="70604" action="modify" lat="52.97683956337" lon="17.4460101074" version="1"/>
+  <node id="70605" action="modify" lat="52.97688478501" lon="17.44678794801" version="1"/>
+  <node id="70606" action="modify" lat="52.97693969694" lon="17.4475282377" version="1"/>
+  <node id="70607" action="modify" lat="52.97737575978" lon="17.45142280519" version="1"/>
+  <node id="70608" action="modify" lat="52.97819619201" lon="17.45875060022" version="1"/>
+  <node id="70609" action="modify" lat="52.97840129602" lon="17.46026336879" version="1"/>
+  <node id="70610" action="modify" lat="52.97867907531" lon="17.46205508441" version="1"/>
+  <node id="70611" action="modify" lat="52.97905052157" lon="17.46442079276" version="1"/>
+  <node id="70612" action="modify" lat="52.98063801461" lon="17.47470438212" version="1"/>
+  <node id="70613" action="modify" lat="52.98120969161" lon="17.47838169068" version="1"/>
+  <node id="70614" action="modify" lat="52.9820413551" lon="17.48373269767" version="1"/>
+  <node id="70615" action="modify" lat="52.9822250444" lon="17.48490683667" version="1"/>
+  <node id="70616" action="modify" lat="52.9825023958" lon="17.48618826136" version="1"/>
+  <node id="70617" action="modify" lat="52.98278014872" lon="17.48713910446" version="1"/>
+  <node id="70618" action="modify" lat="52.98314348561" lon="17.48815566167" version="1"/>
+  <node id="70619" action="modify" lat="52.98345353067" lon="17.48886778817" version="1"/>
+  <node id="70620" action="modify" lat="52.98382978028" lon="17.48961210117" version="1"/>
+  <node id="70621" action="modify" lat="52.98428515097" lon="17.49036177859" version="1"/>
+  <node id="70622" action="modify" lat="52.98456854413" lon="17.49075874552" version="1"/>
+  <node id="70623" action="modify" lat="52.98498192341" lon="17.49123751983" version="1"/>
+  <node id="70624" action="modify" lat="52.98533474596" lon="17.49158352479" version="1"/>
+  <node id="70625" action="modify" lat="52.98614695351" lon="17.49230638012" version="1"/>
+  <node id="70626" action="modify" lat="52.98850840542" lon="17.49443202943" version="1"/>
+  <node id="70627" action="modify" lat="52.99232197725" lon="17.49785452813" version="1"/>
+  <node id="70628" action="modify" lat="52.99534095067" lon="17.50067889422" version="1"/>
+  <node id="70629" action="modify" lat="52.99572032545" lon="17.50101417035" version="1">
+    <tag k="name" v="Kcynia"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="31609"/>
+  </node>
+  <node id="70630" action="modify" lat="52.99902639522" lon="17.50384121865" version="1"/>
+  <node id="70631" action="modify" lat="52.99967531084" lon="17.50434547395" version="1"/>
+  <node id="70632" action="modify" lat="53.00079232682" lon="17.50531106919" version="1"/>
+  <node id="70633" action="modify" lat="53.00323126143" lon="17.50750243127" version="1"/>
+  <node id="70634" action="modify" lat="53.00582983893" lon="17.50979035825" version="1"/>
+  <node id="70635" action="modify" lat="53.00773267435" lon="17.51152306527" version="1"/>
+  <node id="70636" action="modify" lat="53.00831367608" lon="17.51209974021" version="1"/>
+  <node id="70637" action="modify" lat="53.00907219435" lon="17.51291244954" version="1"/>
+  <node id="70638" action="modify" lat="53.00965801955" lon="17.51357495517" version="1"/>
+  <node id="70639" action="modify" lat="53.01112174088" lon="17.51538544625" version="1"/>
+  <node id="70640" action="modify" lat="53.01285328977" lon="17.5175714466" version="1"/>
+  <node id="70641" action="modify" lat="53.01487845218" lon="17.52011686295" version="1"/>
+  <node id="70642" action="modify" lat="53.01715523444" lon="17.52298414439" version="1"/>
+  <node id="70643" action="modify" lat="53.0200482366" lon="17.52662926644" version="1"/>
+  <node id="70644" action="modify" lat="53.02367994627" lon="17.53120511502" version="1"/>
+  <node id="70645" action="modify" lat="53.02431558503" lon="17.53196149796" version="1"/>
+  <node id="70646" action="modify" lat="53.02474471656" lon="17.53244161338" version="1"/>
+  <node id="70647" action="modify" lat="53.02541099126" lon="17.53313630551" version="1"/>
+  <node id="70648" action="modify" lat="53.02636763404" lon="17.53404825658" version="1"/>
+  <node id="70649" action="modify" lat="53.02791144619" lon="17.53545105189" version="1"/>
+  <node id="70650" action="modify" lat="53.03030852043" lon="17.53763705224" version="1"/>
+  <node id="70651" action="modify" lat="53.03527162303" lon="17.54209756315" version="1"/>
+  <node id="70652" action="modify" lat="53.03810051242" lon="17.54467784822" version="1"/>
+  <node id="70653" action="modify" lat="53.041745216" lon="17.54803597391" version="1"/>
+  <node id="70654" action="modify" lat="53.04506711102" lon="17.55113660753" version="1"/>
+  <node id="70655" action="modify" lat="53.04849516727" lon="17.55432307184" version="1"/>
+  <node id="70656" action="modify" lat="53.05013976351" lon="17.55583583772" version="1"/>
+  <node id="70657" action="modify" lat="53.05282902685" lon="17.55811035097" version="1"/>
+  <node id="70658" action="modify" lat="53.05575993929" lon="17.56045996606" version="1"/>
+  <node id="70659" action="modify" lat="53.05952888348" lon="17.56345331132" version="1"/>
+  <node id="70660" action="modify" lat="53.06413886305" lon="17.56713330209" version="1"/>
+  <node id="70661" action="modify" lat="53.06778458841" lon="17.57003545225" version="1"/>
+  <node id="70662" action="modify" lat="53.06888694858" lon="17.57084547937" version="1"/>
+  <node id="70663" action="modify" lat="53.06970886544" lon="17.5714784807" version="1"/>
+  <node id="70664" action="modify" lat="53.0704405194" lon="17.57206320226" version="1"/>
+  <node id="70665" action="modify" lat="53.07150091211" lon="17.5727873987" version="1"/>
+  <node id="70666" action="modify" lat="53.07230666419" lon="17.57325410306" version="1"/>
+  <node id="70667" action="modify" lat="53.07337345674" lon="17.57375835836" version="1"/>
+  <node id="70668" action="modify" lat="53.07417272811" lon="17.57406413019" version="1"/>
+  <node id="70669" action="modify" lat="53.07556497183" lon="17.57443963945" version="1"/>
+  <node id="70670" action="modify" lat="53.07678959344" lon="17.57471858919" version="1"/>
+  <node id="70671" action="modify" lat="53.07989933126" lon="17.57544278562" version="1"/>
+  <node id="70672" action="modify" lat="53.08249651526" lon="17.5760328716" version="1"/>
+  <node id="70673" action="modify" lat="53.08540929947" lon="17.57671951711" version="1"/>
+  <node id="70674" action="modify" lat="53.08897590283" lon="17.57754027307" version="1"/>
+  <node id="70675" action="modify" lat="53.09116662375" lon="17.57804989278" version="1"/>
+  <node id="70676" action="modify" lat="53.09367937219" lon="17.57862388551" version="1"/>
+  <node id="70677" action="modify" lat="53.09672668815" lon="17.57932125986" version="1"/>
+  <node id="70678" action="modify" lat="53.10009910018" lon="17.58010446489" version="1"/>
+  <node id="70679" action="modify" lat="53.10414757802" lon="17.58102714479" version="1"/>
+  <node id="70680" action="modify" lat="53.10815059075" lon="17.58194982469" version="1"/>
+  <node id="70681" action="modify" lat="53.11213391093" lon="17.58288323343" version="1"/>
+  <node id="70682" action="modify" lat="53.1148933594" lon="17.58351087034" version="1"/>
+  <node id="70683" action="modify" lat="53.11844142144" lon="17.5843316263" version="1"/>
+  <node id="70684" action="modify" lat="53.12529846099" lon="17.58591412961" version="1"/>
+  <node id="70685" action="modify" lat="53.12604204601" lon="17.58606433332" version="1"/>
+  <node id="70686" action="modify" lat="53.12702381605" lon="17.58619844377" version="1"/>
+  <node id="70687" action="modify" lat="53.12797337558" lon="17.58627354562" version="1"/>
+  <node id="70688" action="modify" lat="53.12884888305" lon="17.58630036771" version="1"/>
+  <node id="70689" action="modify" lat="53.12976299683" lon="17.58627354562" version="1"/>
+  <node id="70690" action="modify" lat="53.13066743533" lon="17.58619307935" version="1"/>
+  <node id="70691" action="modify" lat="53.13203854067" lon="17.58598923147" version="1"/>
+  <node id="70692" action="modify" lat="53.13363488989" lon="17.5857317394" version="1"/>
+  <node id="70693" action="modify" lat="53.13409511666" lon="17.58565663755" version="1"/>
+  <node id="70694" action="modify" lat="53.13464223297" lon="17.58565127313" version="1"/>
+  <node id="70695" action="modify" lat="53.13503486509" lon="17.58571564615" version="1"/>
+  <node id="70696" action="modify" lat="53.13564955243" lon="17.58593558729" version="1"/>
+  <node id="70697" action="modify" lat="53.13626423098" lon="17.58631109655" version="1"/>
+  <node id="70698" action="modify" lat="53.13676304742" lon="17.58675097883" version="1"/>
+  <node id="70699" action="modify" lat="53.13723289503" lon="17.58729814947" version="1"/>
+  <node id="70700" action="modify" lat="53.13765446625" lon="17.58793651521" version="1"/>
+  <node id="70701" action="modify" lat="53.13796661937" lon="17.58854269445" version="1"/>
+  <node id="70702" action="modify" lat="53.13830773256" lon="17.58941173017" version="1"/>
+  <node id="70703" action="modify" lat="53.13853943054" lon="17.59011983335" version="1"/>
+  <node id="70704" action="modify" lat="53.13880330728" lon="17.59127318323" version="1"/>
+  <node id="70705" action="modify" lat="53.54866031321" lon="14.56639051169" version="1">
+    <tag k="name" v="Police"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="703"/>
+  </node>
+  <node id="70706" action="modify" lat="53.54401150536" lon="14.56910222501" version="1"/>
+  <node id="70707" action="modify" lat="53.54324967054" lon="14.56950187415" version="1"/>
+  <node id="70708" action="modify" lat="53.54232525004" lon="14.570231435" version="1"/>
+  <node id="70709" action="modify" lat="53.54005714663" lon="14.57216798991" version="1"/>
+  <node id="70710" action="modify" lat="53.53853172694" lon="14.57345008582" version="1"/>
+  <node id="70711" action="modify" lat="53.53800251939" lon="14.57399457425" version="1"/>
+  <node id="70712" action="modify" lat="53.53759445122" lon="14.57450419396" version="1"/>
+  <node id="70713" action="modify" lat="53.53706204387" lon="14.57536518306" version="1"/>
+  <node id="70714" action="modify" lat="53.5363383417" lon="14.5766285035" version="1"/>
+  <node id="70715" action="modify" lat="53.53601474399" lon="14.57726955146" version="1"/>
+  <node id="70716" action="modify" lat="53.53574056075" lon="14.57794546813" version="1"/>
+  <node id="70717" action="modify" lat="53.53541855259" lon="14.5790693137" version="1"/>
+  <node id="70718" action="modify" lat="53.53489090025" lon="14.58221822709" version="1"/>
+  <node id="70719" action="modify" lat="53.5345720739" lon="14.58352714509" version="1"/>
+  <node id="70720" action="modify" lat="53.53412093051" lon="14.58458393544" version="1"/>
+  <node id="70721" action="modify" lat="53.53350717648" lon="14.5854637" version="1"/>
+  <node id="70722" action="modify" lat="53.53232268578" lon="14.58690672845" version="1"/>
+  <node id="70723" action="modify" lat="53.53134860466" lon="14.58811908692" version="1"/>
+  <node id="70724" action="modify" lat="53.5319831684" lon="14.5873293009" version="1">
+    <tag k="name" v="Szczecin Skolwin Północny"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="264499"/>
+  </node>
+  <node id="70725" action="modify" lat="53.53107757974" lon="14.58853482932" version="1"/>
+  <node id="70726" action="modify" lat="53.53091336968" lon="14.58882987231" version="1"/>
+  <node id="70727" action="modify" lat="53.53071567906" lon="14.58927780122" version="1"/>
+  <node id="70728" action="modify" lat="53.53054190186" lon="14.58981424302" version="1"/>
+  <node id="70729" action="modify" lat="53.53043986721" lon="14.59024339646" version="1"/>
+  <node id="70730" action="modify" lat="53.53034102091" lon="14.59082275361" version="1"/>
+  <node id="70731" action="modify" lat="53.53025652308" lon="14.59155231446" version="1"/>
+  <node id="70732" action="modify" lat="53.53005564078" lon="14.59328770369" version="1"/>
+  <node id="70733" action="modify" lat="53.52993128459" lon="14.59437668055" version="1"/>
+  <node id="70734" action="modify" lat="53.52983562573" lon="14.59500431746" version="1"/>
+  <node id="70735" action="modify" lat="53.52974474962" lon="14.59545761079" version="1"/>
+  <node id="70736" action="modify" lat="53.52946574279" lon="14.59654926986" version="1"/>
+  <node id="70737" action="modify" lat="53.52928717745" lon="14.59721177548" version="1"/>
+  <node id="70738" action="modify" lat="53.52909745096" lon="14.59772944182" version="1"/>
+  <node id="70739" action="modify" lat="53.52890612926" lon="14.59814250201" version="1"/>
+  <node id="70740" action="modify" lat="53.52864624924" lon="14.59856897324" version="1"/>
+  <node id="70741" action="modify" lat="53.52837520703" lon="14.59893643588" version="1"/>
+  <node id="70742" action="modify" lat="53.52695619302" lon="14.60072278708" version="1"/>
+  <node id="70743" action="modify" lat="53.52583210886" lon="14.60213094682" version="1"/>
+  <node id="70744" action="modify" lat="53.52500457251" lon="14.60316627949" version="1"/>
+  <node id="70745" action="modify" lat="53.52369068584" lon="14.6048051092" version="1"/>
+  <node id="70746" action="modify" lat="53.52329842536" lon="14.60534155101" version="1"/>
+  <node id="70747" action="modify" lat="53.52311823866" lon="14.60563123092" version="1"/>
+  <node id="70748" action="modify" lat="53.52292928182" lon="14.60599601135" version="1"/>
+  <node id="70749" action="modify" lat="53.52272677017" lon="14.60644125804" version="1"/>
+  <node id="70750" action="modify" lat="53.52256332503" lon="14.60688784584" version="1"/>
+  <node id="70751" action="modify" lat="53.52244213603" lon="14.60729688272" version="1"/>
+  <node id="70752" action="modify" lat="53.52230739259" lon="14.60784003004" version="1"/>
+  <node id="70753" action="modify" lat="53.5222061354" lon="14.608391224" version="1"/>
+  <node id="70754" action="modify" lat="53.52205863434" lon="14.60926428303" version="1"/>
+  <node id="70755" action="modify" lat="53.52192388968" lon="14.61002334818" version="1"/>
+  <node id="70756" action="modify" lat="53.52178436074" lon="14.61053967342" version="1"/>
+  <node id="70757" action="modify" lat="53.52163207433" lon="14.61097016796" version="1"/>
+  <node id="70758" action="modify" lat="53.52144948939" lon="14.61137652263" version="1"/>
+  <node id="70759" action="modify" lat="53.52117281988" lon="14.61184590921" version="1"/>
+  <node id="70760" action="modify" lat="53.52093521753" lon="14.61216375098" version="1"/>
+  <node id="70761" action="modify" lat="53.52066173398" lon="14.61246281728" version="1"/>
+  <node id="70762" action="modify" lat="53.52020725304" lon="14.61290940508" version="1"/>
+  <node id="70763" action="modify" lat="53.5198045948" lon="14.61331575975" version="1"/>
+  <node id="70764" action="modify" lat="53.51943542161" lon="14.61366176471" version="1"/>
+  <node id="70765" action="modify" lat="53.51915156271" lon="14.61385756597" version="1"/>
+  <node id="70766" action="modify" lat="53.51881029163" lon="14.61405336723" version="1"/>
+  <node id="70767" action="modify" lat="53.51832708535" lon="14.61426392063" version="1"/>
+  <node id="70768" action="modify" lat="53.51754565099" lon="14.61452677712" version="1"/>
+  <node id="70769" action="modify" lat="53.51690055889" lon="14.61469173163" version="1">
+    <tag k="name" v="Szczecin Skolwin"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="729"/>
+  </node>
+  <node id="70770" action="modify" lat="53.51586551911" lon="14.61493313044" version="1"/>
+  <node id="70771" action="modify" lat="53.51404417048" lon="14.61538374156" version="1"/>
+  <node id="70772" action="modify" lat="53.51235991152" lon="14.61577534407" version="1"/>
+  <node id="70773" action="modify" lat="53.51174903212" lon="14.61587995023" version="1"/>
+  <node id="70774" action="modify" lat="53.51129445557" lon="14.61586922139" version="1"/>
+  <node id="70775" action="modify" lat="53.54278427515" lon="14.56985592574" version="1"/>
+  <node id="70776" action="modify" lat="53.54184662526" lon="14.57064010365" version="1">
+    <tag k="name" v="Police Dąbrówka"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="264500"/>
+  </node>
+  <node id="70777" action="modify" lat="53.51083986243" lon="14.61579679722" version="1"/>
+  <node id="70778" action="modify" lat="53.51006626529" lon="14.615614407" version="1"/>
+  <node id="70779" action="modify" lat="53.50947927907" lon="14.61548029655" version="1"/>
+  <node id="70780" action="modify" lat="53.50915547612" lon="14.61545079225" version="1"/>
+  <node id="70781" action="modify" lat="53.50882848049" lon="14.61545883888" version="1"/>
+  <node id="70782" action="modify" lat="53.50824785764" lon="14.61554198736" version="1"/>
+  <node id="70783" action="modify" lat="53.50763372866" lon="14.61563050026" version="1"/>
+  <node id="70784" action="modify" lat="53.50736893264" lon="14.61564927572" version="1"/>
+  <node id="70785" action="modify" lat="53.50706266049" lon="14.61563318247" version="1"/>
+  <node id="70786" action="modify" lat="53.50672767278" lon="14.61555808061" version="1"/>
+  <node id="70787" action="modify" lat="53.50636237364" lon="14.61541592354" version="1"/>
+  <node id="70788" action="modify" lat="53.50588221584" lon="14.6151369738" version="1"/>
+  <node id="70789" action="modify" lat="53.50460283196" lon="14.61432962888" version="1"/>
+  <node id="70790" action="modify" lat="53.50398865017" lon="14.61396216625" version="1"/>
+  <node id="70791" action="modify" lat="53.50369511599" lon="14.61384414905" version="1"/>
+  <node id="70792" action="modify" lat="53.50340636571" lon="14.6137985515" version="1"/>
+  <node id="70793" action="modify" lat="53.50306496781" lon="14.61377441162" version="1"/>
+  <node id="70794" action="modify" lat="53.50235982887" lon="14.6137395429" version="1"/>
+  <node id="70795" action="modify" lat="53.50097823305" lon="14.61369126314" version="1"/>
+  <node id="70796" action="modify" lat="53.50046929669" lon="14.6136805343" version="1"/>
+  <node id="70797" action="modify" lat="53.50009756188" lon="14.61362689012" version="1"/>
+  <node id="70798" action="modify" lat="53.49976730547" lon="14.61356251711" version="1"/>
+  <node id="70799" action="modify" lat="53.49938439627" lon="14.61343377107" version="1"/>
+  <node id="70800" action="modify" lat="53.49873503818" lon="14.61322992319" version="1"/>
+  <node id="70801" action="modify" lat="53.49827713104" lon="14.61310654157" version="1"/>
+  <node id="70802" action="modify" lat="53.49797717525" lon="14.61307435507" version="1"/>
+  <node id="70803" action="modify" lat="53.49766764418" lon="14.61310654157" version="1"/>
+  <node id="70804" action="modify" lat="53.49723046758" lon="14.6132621097" version="1"/>
+  <node id="70805" action="modify" lat="53.49657948093" lon="14.61369126314" version="1"/>
+  <node id="70806" action="modify" lat="53.49588699887" lon="14.61423843378" version="1"/>
+  <node id="70807" action="modify" lat="53.49548331171" lon="14.61453347677" version="1"/>
+  <node id="70808" action="modify" lat="53.49509717258" lon="14.61471586698" version="1"/>
+  <node id="70809" action="modify" lat="53.49476368595" lon="14.61481242651" version="1">
+    <tag k="name" v="Szczecin Stołczyn"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="604"/>
+  </node>
+  <node id="70810" action="modify" lat="53.49442540975" lon="14.61484997743" version="1"/>
+  <node id="70811" action="modify" lat="53.49403447399" lon="14.61482315534" version="1"/>
+  <node id="70812" action="modify" lat="53.49354141109" lon="14.61478292221" version="1"/>
+  <node id="70813" action="modify" lat="53.49314727579" lon="14.61471050256" version="1"/>
+  <node id="70814" action="modify" lat="53.49285526225" lon="14.61464881176" version="1"/>
+  <node id="70815" action="modify" lat="53.49248026924" lon="14.61452006572" version="1"/>
+  <node id="70816" action="modify" lat="53.49206537949" lon="14.61428403133" version="1"/>
+  <node id="70817" action="modify" lat="53.49153399553" lon="14.61392461532" version="1"/>
+  <node id="70818" action="modify" lat="53.49130101428" lon="14.61377977604" version="1"/>
+  <node id="70819" action="modify" lat="53.49114143734" lon="14.61368858093" version="1"/>
+  <node id="70820" action="modify" lat="53.49095313578" lon="14.61360006803" version="1"/>
+  <node id="70821" action="modify" lat="53.49073451343" lon="14.61352228397" version="1"/>
+  <node id="70822" action="modify" lat="53.49058450913" lon="14.61349546188" version="1"/>
+  <node id="70823" action="modify" lat="53.49028609472" lon="14.61345791096" version="1"/>
+  <node id="70824" action="modify" lat="53.48972277197" lon="14.61344986433" version="1"/>
+  <node id="70825" action="modify" lat="53.48873654018" lon="14.61345254654" version="1"/>
+  <node id="70826" action="modify" lat="53.48850354357" lon="14.61342572445" version="1"/>
+  <node id="70827" action="modify" lat="53.48830246326" lon="14.61337208027" version="1"/>
+  <node id="70828" action="modify" lat="53.48798169033" lon="14.61325138086" version="1"/>
+  <node id="70829" action="modify" lat="53.48709276958" lon="14.61282222742" version="1"/>
+  <node id="70830" action="modify" lat="53.48611126452" lon="14.61231528992" version="1"/>
+  <node id="70831" action="modify" lat="53.48466689465" lon="14.61157231802" version="1"/>
+  <node id="70832" action="modify" lat="53.48429182923" lon="14.61134969467" version="1"/>
+  <node id="70833" action="modify" lat="53.48394868137" lon="14.61110829586" version="1"/>
+  <node id="70834" action="modify" lat="53.48344432878" lon="14.61066573137" version="1"/>
+  <node id="70835" action="modify" lat="53.48293039371" lon="14.61024194235" version="1"/>
+  <node id="70836" action="modify" lat="53.48253775589" lon="14.60998713249" version="1"/>
+  <node id="70837" action="modify" lat="53.48179237246" lon="14.60968672508" version="1"/>
+  <node id="70838" action="modify" lat="53.4815449725" lon="14.60955261463" version="1"/>
+  <node id="70839" action="modify" lat="53.4811603026" lon="14.60926025385" version="1"/>
+  <node id="70840" action="modify" lat="53.48014194801" lon="14.60820882791" version="1"/>
+  <node id="70841" action="modify" lat="53.47937257927" lon="14.6073102879" version="1"/>
+  <node id="70842" action="modify" lat="53.47894638768" lon="14.60669069761" version="1"/>
+  <node id="70843" action="modify" lat="53.47830469788" lon="14.60569291586" version="1"/>
+  <node id="70844" action="modify" lat="53.47750017756" lon="14.60450201506" version="1"/>
+  <node id="70845" action="modify" lat="53.47714739697" lon="14.60408090824" version="1"/>
+  <node id="70846" action="modify" lat="53.47669883461" lon="14.6035337376" version="1"/>
+  <node id="70847" action="modify" lat="53.47632210242" lon="14.60313677067" version="1"/>
+  <node id="70848" action="modify" lat="53.47597410107" lon="14.60279344792" version="1"/>
+  <node id="70849" action="modify" lat="53.47546486459" lon="14.60241123313" version="1"/>
+  <node id="70850" action="modify" lat="53.47512244352" lon="14.60221140856" version="1"/>
+  <node id="70851" action="modify" lat="53.47443440029" lon="14.60186406249" version="1"/>
+  <node id="70852" action="modify" lat="53.47414385432" lon="14.60167764897" version="1"/>
+  <node id="70853" action="modify" lat="53.47372958342" lon="14.60132896179" version="1"/>
+  <node id="70854" action="modify" lat="53.47318200527" lon="14.60069327826" version="1"/>
+  <node id="70855" action="modify" lat="53.472324704" lon="14.59962844128" version="1"/>
+  <node id="70856" action="modify" lat="53.47204212604" lon="14.59933339829" version="1"/>
+  <node id="70857" action="modify" lat="53.47169568609" lon="14.59903299088" version="1"/>
+  <node id="70858" action="modify" lat="53.47114488865" lon="14.59865479941" version="1"/>
+  <node id="70859" action="modify" lat="53.46989399232" lon="14.5977777184" version="1"/>
+  <node id="70860" action="modify" lat="53.46869734573" lon="14.59682016844" version="1"/>
+  <node id="70861" action="modify" lat="53.46802197146" lon="14.59628372664" version="1"/>
+  <node id="70862" action="modify" lat="53.46768667528" lon="14.59605573887" version="1"/>
+  <node id="70863" action="modify" lat="53.46740566311" lon="14.595916264" version="1"/>
+  <node id="70864" action="modify" lat="53.46710229561" lon="14.59578483576" version="1"/>
+  <node id="70865" action="modify" lat="53.4664492498" lon="14.59556757683" version="1"/>
+  <node id="70866" action="modify" lat="53.46609957077" lon="14.59541469092" version="1"/>
+  <node id="70867" action="modify" lat="53.46582014481" lon="14.59521620745" version="1"/>
+  <node id="70868" action="modify" lat="53.46558382886" lon="14.59500699515" version="1"/>
+  <node id="70869" action="modify" lat="53.46535868878" lon="14.59475754971" version="1"/>
+  <node id="70870" action="modify" lat="53.46512875726" lon="14.59443568463" version="1"/>
+  <node id="70871" action="modify" lat="53.46489722694" lon="14.59401860247" version="1"/>
+  <node id="70872" action="modify" lat="53.46470002666" lon="14.59354787479" version="1"/>
+  <node id="70873" action="modify" lat="53.46457068832" lon="14.59315761337" version="1"/>
+  <node id="70874" action="modify" lat="53.46445572058" lon="14.59271236668" version="1"/>
+  <node id="70875" action="modify" lat="53.4643678978" lon="14.59220140586" version="1"/>
+  <node id="70876" action="modify" lat="53.46429284909" lon="14.59134041677" version="1"/>
+  <node id="70877" action="modify" lat="53.46430163139" lon="14.590932721" version="1"/>
+  <node id="70878" action="modify" lat="53.46432478473" lon="14.59049820314" version="1"/>
+  <node id="70879" action="modify" lat="53.46441021244" lon="14.58981155763" version="1">
+    <tag k="name" v="Szczecin Golęcino"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="547"/>
+  </node>
+  <node id="70880" action="modify" lat="53.46453156739" lon="14.58900689492" version="1"/>
+  <node id="70881" action="modify" lat="53.4645778738" lon="14.58858847032" version="1"/>
+  <node id="70882" action="modify" lat="53.46431919599" lon="14.59175079475" version="1"/>
+  <node id="70883" action="modify" lat="53.46435877483" lon="14.59022169439" version="1"/>
+  <node id="70884" action="modify" lat="53.47466599597" lon="14.60198097872" version="1">
+    <tag k="name" v="Szczecin Gocław"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="9"/>
+  </node>
+  <node id="70885" action="modify" lat="53.46459783344" lon="14.58810164938" version="1"/>
+  <node id="70886" action="modify" lat="53.46458585765" lon="14.58749010573" version="1"/>
+  <node id="70887" action="modify" lat="53.46452198675" lon="14.5868879498" version="1"/>
+  <node id="70888" action="modify" lat="53.46441180921" lon="14.58633541475" version="1"/>
+  <node id="70889" action="modify" lat="53.46426171182" lon="14.58578958521" version="1"/>
+  <node id="70890" action="modify" lat="53.46407329094" lon="14.58530008207" version="1"/>
+  <node id="70891" action="modify" lat="53.46396151544" lon="14.58507477651" version="1"/>
+  <node id="70892" action="modify" lat="53.46378107803" lon="14.5847555923" version="1"/>
+  <node id="70893" action="modify" lat="53.46357029969" lon="14.58444445605" version="1"/>
+  <node id="70894" action="modify" lat="53.4631455462" lon="14.58385973449" version="1"/>
+  <node id="70895" action="modify" lat="53.4626473337" lon="14.58315431351" version="1"/>
+  <node id="70896" action="modify" lat="53.46220021493" lon="14.58240329499" version="1"/>
+  <node id="70897" action="modify" lat="53.46168442565" lon="14.58152889485" version="1"/>
+  <node id="70898" action="modify" lat="53.46073906184" lon="14.57994907374" version="1"/>
+  <node id="70899" action="modify" lat="53.45934493119" lon="14.57753508563" version="1">
+    <tag k="name" v="Szczecin Żelechowa"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="539"/>
+  </node>
+  <node id="70900" action="modify" lat="53.45851609643" lon="14.57615911241" version="1"/>
+  <node id="70901" action="modify" lat="53.45772557421" lon="14.57486628766" version="1"/>
+  <node id="70902" action="modify" lat="53.45733270315" lon="14.5742815661" version="1"/>
+  <node id="70903" action="modify" lat="53.45703086072" lon="14.57390873904" version="1"/>
+  <node id="70904" action="modify" lat="53.4567066572" lon="14.57360028501" version="1"/>
+  <node id="70905" action="modify" lat="53.45647667882" lon="14.57341253038" version="1"/>
+  <node id="70906" action="modify" lat="53.45626586421" lon="14.57328646655" version="1"/>
+  <node id="70907" action="modify" lat="53.45603109216" lon="14.57316040273" version="1"/>
+  <node id="70908" action="modify" lat="53.45567334178" lon="14.57301288123" version="1"/>
+  <node id="70909" action="modify" lat="53.45483644966" lon="14.57268296952" version="1"/>
+  <node id="70910" action="modify" lat="53.45409696828" lon="14.57239865537" version="1"/>
+  <node id="70911" action="modify" lat="53.45222345134" lon="14.57165568347" version="1"/>
+  <node id="70912" action="modify" lat="53.45153503688" lon="14.57129358525" version="1"/>
+  <node id="70913" action="modify" lat="53.45054312543" lon="14.57056670661" version="1"/>
+  <node id="70914" action="modify" lat="53.4492109567" lon="14.5694911408" version="1"/>
+  <node id="70915" action="modify" lat="53.44974799082" lon="14.56992472712" version="1">
+    <tag k="name" v="Szczecin Drzetowo"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="521"/>
+  </node>
+  <node id="70916" action="modify" lat="53.44869021751" lon="14.56903248306" version="1"/>
+  <node id="70917" action="modify" lat="53.44833719744" lon="14.56858455415" version="1"/>
+  <node id="70918" action="modify" lat="53.44805126501" lon="14.5680937099" version="1"/>
+  <node id="70919" action="modify" lat="53.44779568131" lon="14.56751167054" version="1"/>
+  <node id="70920" action="modify" lat="53.44768386296" lon="14.56712543245" version="1"/>
+  <node id="70921" action="modify" lat="53.44755926503" lon="14.56662922378" version="1"/>
+  <node id="70922" action="modify" lat="53.44746821246" lon="14.56605523105" version="1"/>
+  <node id="70923" action="modify" lat="53.44741230289" lon="14.5654168653" version="1"/>
+  <node id="70924" action="modify" lat="53.44742508222" lon="14.56483750816" version="1"/>
+  <node id="70925" action="modify" lat="53.44748738143" lon="14.56402748104" version="1"/>
+  <node id="70926" action="modify" lat="53.44763594072" lon="14.56255226608" version="1"/>
+  <node id="70927" action="modify" lat="53.44801931713" lon="14.55872743602" version="1"/>
+  <node id="70928" action="modify" lat="53.44821419881" lon="14.55656825777" version="1"/>
+  <node id="70929" action="modify" lat="53.44844901407" lon="14.55436884638" version="1">
+    <tag k="name" v="Szczecin Niebuszewo"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="505"/>
+  </node>
+  <node id="70930" action="modify" lat="53.44873015172" lon="14.55220966812" version="1"/>
+  <node id="70931" action="modify" lat="53.44895537998" lon="14.5505976605" version="1"/>
+  <node id="70932" action="modify" lat="53.44911351825" lon="14.5492887425" version="1"/>
+  <node id="70933" action="modify" lat="53.44969814555" lon="14.54462169882" version="1"/>
+  <node id="70934" action="modify" lat="53.44990739544" lon="14.54276561018" version="1"/>
+  <node id="70935" action="modify" lat="53.4500239999" lon="14.54189657446" version="1"/>
+  <node id="70936" action="modify" lat="53.45020928851" lon="14.54095780131" version="1"/>
+  <node id="70937" action="modify" lat="53.4504281197" lon="14.54005657908" version="1"/>
+  <node id="70938" action="modify" lat="53.45070445238" lon="14.53914731022" version="1"/>
+  <node id="70939" action="modify" lat="53.45097918597" lon="14.53823804137" version="1"/>
+  <node id="70940" action="modify" lat="53.45112933033" lon="14.53760504004" version="1"/>
+  <node id="70941" action="modify" lat="53.45125711234" lon="14.53687011477" version="1"/>
+  <node id="70942" action="modify" lat="53.45134655951" lon="14.53609763857" version="1"/>
+  <node id="70943" action="modify" lat="53.45138968576" lon="14.53534662005" version="1"/>
+  <node id="70944" action="modify" lat="53.45139447757" lon="14.53455536839" version="1"/>
+  <node id="70945" action="modify" lat="53.45133857317" lon="14.53363268849" version="1"/>
+  <node id="70946" action="modify" lat="53.45123634778" lon="14.53284948346" version="1"/>
+  <node id="70947" action="modify" lat="53.4511165521" lon="14.53220575329" version="1"/>
+  <node id="70948" action="modify" lat="53.45097439412" lon="14.53162639615" version="1">
+    <tag k="name" v="Szczecin Niemierzyn"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="264497"/>
+  </node>
+  <node id="70949" action="modify" lat="53.45071403614" lon="14.53079491135" version="1"/>
+  <node id="70950" action="modify" lat="53.45036742211" lon="14.52977567193" version="1"/>
+  <node id="70951" action="modify" lat="53.44883238314" lon="14.52524005648" version="1"/>
+  <node id="70952" action="modify" lat="53.44858638838" lon="14.52454804656" version="1"/>
+  <node id="70953" action="modify" lat="53.44832122361" lon="14.52403306243" version="1"/>
+  <node id="70954" action="modify" lat="53.44796021349" lon="14.52347784516" version="1"/>
+  <node id="70955" action="modify" lat="53.4472621454" lon="14.52264099595" version="1"/>
+  <node id="70956" action="modify" lat="53.44687396984" lon="14.52225744006" version="1"/>
+  <node id="70957" action="modify" lat="53.44658323521" lon="14.52203481671" version="1"/>
+  <node id="70958" action="modify" lat="53.44630527827" lon="14.52186315533" version="1">
+    <tag k="name" v="Szczecin Łękno"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="422"/>
+  </node>
+  <node id="70959" action="modify" lat="53.44586118236" lon="14.52169149396" version="1"/>
+  <node id="70960" action="modify" lat="53.4454570191" lon="14.52160566327" version="1"/>
+  <node id="70961" action="modify" lat="53.44513751973" lon="14.52158957001" version="1"/>
+  <node id="70962" action="modify" lat="53.44476529994" lon="14.52162980315" version="1"/>
+  <node id="70963" action="modify" lat="53.44437071144" lon="14.52175318476" version="1"/>
+  <node id="70964" action="modify" lat="53.44385949823" lon="14.52201335904" version="1"/>
+  <node id="70965" action="modify" lat="53.44346649888" lon="14.52225744006" version="1"/>
+  <node id="70966" action="modify" lat="53.44286421235" lon="14.52263563153" version="1"/>
+  <node id="70967" action="modify" lat="53.44207499638" lon="14.52314256903" version="1"/>
+  <node id="70968" action="modify" lat="53.44156535318" lon="14.52342151877" version="1"/>
+  <node id="70969" action="modify" lat="53.44112120772" lon="14.52359318015" version="1"/>
+  <node id="70970" action="modify" lat="53.44077771075" lon="14.52367364642" version="1"/>
+  <node id="70971" action="modify" lat="53.44047095762" lon="14.52368437525" version="1"/>
+  <node id="70972" action="modify" lat="53.43983188148" lon="14.52360122678" version="1"/>
+  <node id="70973" action="modify" lat="53.43865116303" lon="14.52340274331" version="1"/>
+  <node id="70974" action="modify" lat="53.43638869339" lon="14.52298968312" version="1"/>
+  <node id="70975" action="modify" lat="53.43811389466" lon="14.52330465197" version="1">
+    <tag k="name" v="Szczecin Pogodno"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="414"/>
+  </node>
+  <node id="70976" action="modify" lat="53.43554822553" lon="14.52280997512" version="1"/>
+  <node id="70977" action="modify" lat="53.43525581552" lon="14.52277242419" version="1"/>
+  <node id="70978" action="modify" lat="53.43504010192" lon="14.52277778861" version="1"/>
+  <node id="70979" action="modify" lat="53.43483557247" lon="14.52280997512" version="1"/>
+  <node id="70980" action="modify" lat="53.43459109456" lon="14.52288507697" version="1"/>
+  <node id="70981" action="modify" lat="53.43435939851" lon="14.52298968312" version="1"/>
+  <node id="70982" action="modify" lat="53.43410373244" lon="14.52315061566" version="1"/>
+  <node id="70983" action="modify" lat="53.43383528141" lon="14.52338128564" version="1"/>
+  <node id="70984" action="modify" lat="53.43360198331" lon="14.52363341328" version="1"/>
+  <node id="70985" action="modify" lat="53.4333926531" lon="14.52389895198" version="1"/>
+  <node id="70986" action="modify" lat="53.43316574437" lon="14.52427982566" version="1"/>
+  <node id="70987" action="modify" lat="53.43293244259" lon="14.5247089791" version="1"/>
+  <node id="70988" action="modify" lat="53.43239712202" lon="14.52571480748" version="1"/>
+  <node id="70989" action="modify" lat="53.43195607673" lon="14.52653019902" version="1"/>
+  <node id="70990" action="modify" lat="53.43163807384" lon="14.52704786536" version="1"/>
+  <node id="70991" action="modify" lat="53.43140636169" lon="14.52738045928" version="1"/>
+  <node id="70992" action="modify" lat="53.43115387392" lon="14.5276540446" version="1"/>
+  <node id="70993" action="modify" lat="53.43081349245" lon="14.52795445201" version="1"/>
+  <node id="70994" action="modify" lat="53.43053383427" lon="14.52811538455" version="1"/>
+  <node id="70995" action="modify" lat="53.43027494907" lon="14.52820389744" version="1"/>
+  <node id="70996" action="modify" lat="53.43007359282" lon="14.528249495" version="1"/>
+  <node id="70997" action="modify" lat="53.42972521229" lon="14.52828704592" version="1"/>
+  <node id="70998" action="modify" lat="53.42927614877" lon="14.52830045697" version="1"/>
+  <node id="70999" action="modify" lat="53.42858896054" lon="14.52825754162" version="1"/>
+  <node id="71000" action="modify" lat="53.42833485789" lon="14.52819316861" version="1"/>
+  <node id="71001" action="modify" lat="53.42789856489" lon="14.52805101153" version="1"/>
+  <node id="71002" action="modify" lat="53.42758532613" lon="14.52785521027" version="1"/>
+  <node id="71003" action="modify" lat="53.4288957904" lon="14.52829586291" version="1">
+    <tag k="name" v="Szczecin Turzyn"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="406"/>
+  </node>
+  <node id="71004" action="modify" lat="53.42650177628" lon="14.52720880165" version="1"/>
+  <node id="71005" action="modify" lat="53.42595119159" lon="14.52690571203" version="1"/>
+  <node id="71006" action="modify" lat="53.42574819748" lon="14.5267796458" version="1"/>
+  <node id="71007" action="modify" lat="53.42552444442" lon="14.52667906296" version="1"/>
+  <node id="71008" action="modify" lat="53.42526153308" lon="14.52660530221" version="1"/>
+  <node id="71009" action="modify" lat="53.42495706533" lon="14.52656775129" version="1"/>
+  <node id="71010" action="modify" lat="53.42458626702" lon="14.52659859669" version="1"/>
+  <node id="71011" action="modify" lat="53.42409559358" lon="14.52672466051" version="1"/>
+  <node id="71012" action="modify" lat="53.42186671495" lon="14.52726244208" version="1">
+    <tag k="name" v="Szczecin Cmentarz Centralny"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="264496"/>
+  </node>
+  <node id="71013" action="modify" lat="53.42060237931" lon="14.5275655317" version="1"/>
+  <node id="71014" action="modify" lat="53.41960654866" lon="14.52765940901" version="1"/>
+  <node id="71015" action="modify" lat="53.41611056686" lon="14.52792494771" version="1"/>
+  <node id="71016" action="modify" lat="53.41583241056" lon="14.52796518084" version="1"/>
+  <node id="71017" action="modify" lat="53.41557983028" lon="14.52804028269" version="1"/>
+  <node id="71018" action="modify" lat="53.4153480306" lon="14.52815293547" version="1"/>
+  <node id="71019" action="modify" lat="53.41514180775" lon="14.52828704592" version="1"/>
+  <node id="71020" action="modify" lat="53.41497554984" lon="14.52841579196" version="1"/>
+  <node id="71021" action="modify" lat="53.4147917062" lon="14.52860086438" version="1"/>
+  <node id="71022" action="modify" lat="53.41449755473" lon="14.52900051352" version="1"/>
+  <node id="71023" action="modify" lat="53.41421619055" lon="14.52942698475" version="1"/>
+  <node id="71024" action="modify" lat="53.41396999537" lon="14.52986150261" version="1">
+    <tag k="name" v="Szczecin Pomorzany"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="265"/>
+  </node>
+  <node id="71025" action="modify" lat="53.413559134" lon="14.53081905123" version="1"/>
+  <node id="71026" action="modify" lat="53.41293084414" lon="14.53225403305" version="1"/>
+  <node id="71027" action="modify" lat="53.4119012784" lon="14.53462779179" version="1"/>
+  <node id="71028" action="modify" lat="53.41149519334" lon="14.53560411587" version="1"/>
+  <node id="71029" action="modify" lat="53.4112138093" lon="14.53653216019" version="1"/>
+  <node id="71030" action="modify" lat="53.41108590685" lon="14.53723489895" version="1"/>
+  <node id="71031" action="modify" lat="53.41100596762" lon="14.53810929909" version="1"/>
+  <node id="71032" action="modify" lat="53.41100916519" lon="14.53899979248" version="1"/>
+  <node id="71033" action="modify" lat="53.41119782151" lon="14.54023360863" version="1"/>
+  <node id="71034" action="modify" lat="53.41144083521" lon="14.54141914502" version="1"/>
+  <node id="71035" action="modify" lat="53.4117829522" lon="14.54223185059" version="1"/>
+  <node id="71036" action="modify" lat="53.41224526567" lon="14.54294393567" version="1"/>
+  <node id="71037" action="modify" lat="53.50542161341" lon="14.61484631153" version="1">
+    <tag k="name" v="Szczecin Stołczyn Północny"/>
+    <tag k="railway" v="station"/>
+    <tag k="ref" v="264498"/>
+  </node>
   <way id="1" action="modify" version="1">
     <nd ref="15250"/>
     <nd ref="15249"/>
@@ -140768,6 +141313,147 @@
     <nd ref="46403"/>
     <nd ref="46404"/>
     <nd ref="38880"/>
+    <nd ref="70565"/>
+    <nd ref="70566"/>
+    <nd ref="70567"/>
+    <nd ref="70568"/>
+    <nd ref="70569"/>
+    <nd ref="70570"/>
+    <nd ref="70571"/>
+    <nd ref="70572"/>
+    <nd ref="70573"/>
+    <nd ref="70574"/>
+    <nd ref="70575"/>
+    <nd ref="70576"/>
+    <nd ref="70577"/>
+    <nd ref="70578"/>
+    <nd ref="70579"/>
+    <nd ref="70580"/>
+    <nd ref="70581"/>
+    <nd ref="70582"/>
+    <nd ref="70583"/>
+    <nd ref="70584"/>
+    <nd ref="70585"/>
+    <nd ref="70586"/>
+    <nd ref="70587"/>
+    <nd ref="70588"/>
+    <nd ref="70589"/>
+    <nd ref="70590"/>
+    <nd ref="70591"/>
+    <nd ref="70592"/>
+    <nd ref="70593"/>
+    <nd ref="70594"/>
+    <nd ref="70595"/>
+    <nd ref="70596"/>
+    <nd ref="70597"/>
+    <nd ref="70598"/>
+    <nd ref="70599"/>
+    <nd ref="70600"/>
+    <nd ref="70601"/>
+    <nd ref="70602"/>
+    <nd ref="70603"/>
+    <nd ref="70604"/>
+    <nd ref="70605"/>
+    <nd ref="70606"/>
+    <nd ref="70607"/>
+    <nd ref="70608"/>
+    <nd ref="70609"/>
+    <nd ref="70610"/>
+    <nd ref="70611"/>
+    <nd ref="70612"/>
+    <nd ref="70613"/>
+    <nd ref="70614"/>
+    <nd ref="70615"/>
+    <nd ref="70616"/>
+    <nd ref="70617"/>
+    <nd ref="70618"/>
+    <nd ref="70619"/>
+    <nd ref="70620"/>
+    <nd ref="70621"/>
+    <nd ref="70622"/>
+    <nd ref="70623"/>
+    <nd ref="70624"/>
+    <nd ref="70625"/>
+    <nd ref="70626"/>
+    <nd ref="70627"/>
+    <nd ref="70628"/>
+    <nd ref="70629"/>
+    <nd ref="70630"/>
+    <nd ref="70631"/>
+    <nd ref="70632"/>
+    <nd ref="70633"/>
+    <nd ref="70634"/>
+    <nd ref="70635"/>
+    <nd ref="70636"/>
+    <nd ref="70637"/>
+    <nd ref="70638"/>
+    <nd ref="70639"/>
+    <nd ref="70640"/>
+    <nd ref="70641"/>
+    <nd ref="70642"/>
+    <nd ref="70643"/>
+    <nd ref="70644"/>
+    <nd ref="70645"/>
+    <nd ref="70646"/>
+    <nd ref="70647"/>
+    <nd ref="70648"/>
+    <nd ref="70649"/>
+    <nd ref="70650"/>
+    <nd ref="70651"/>
+    <nd ref="70652"/>
+    <nd ref="70653"/>
+    <nd ref="70654"/>
+    <nd ref="70655"/>
+    <nd ref="70656"/>
+    <nd ref="70657"/>
+    <nd ref="70658"/>
+    <nd ref="70659"/>
+    <nd ref="70660"/>
+    <nd ref="70661"/>
+    <nd ref="70662"/>
+    <nd ref="70663"/>
+    <nd ref="70664"/>
+    <nd ref="70665"/>
+    <nd ref="70666"/>
+    <nd ref="70667"/>
+    <nd ref="70668"/>
+    <nd ref="70669"/>
+    <nd ref="70670"/>
+    <nd ref="70671"/>
+    <nd ref="70672"/>
+    <nd ref="70673"/>
+    <nd ref="70674"/>
+    <nd ref="70675"/>
+    <nd ref="70676"/>
+    <nd ref="70677"/>
+    <nd ref="70678"/>
+    <nd ref="70679"/>
+    <nd ref="70680"/>
+    <nd ref="70681"/>
+    <nd ref="70682"/>
+    <nd ref="70683"/>
+    <nd ref="70684"/>
+    <nd ref="70685"/>
+    <nd ref="70686"/>
+    <nd ref="70687"/>
+    <nd ref="70688"/>
+    <nd ref="70689"/>
+    <nd ref="70690"/>
+    <nd ref="70691"/>
+    <nd ref="70692"/>
+    <nd ref="70693"/>
+    <nd ref="70694"/>
+    <nd ref="70695"/>
+    <nd ref="70696"/>
+    <nd ref="70697"/>
+    <nd ref="70698"/>
+    <nd ref="70699"/>
+    <nd ref="70700"/>
+    <nd ref="70701"/>
+    <nd ref="70702"/>
+    <nd ref="70703"/>
+    <nd ref="70704"/>
+    <nd ref="46871"/>
     <tag k="railway" v="rail"/>
   </way>
   <way id="406" action="modify" version="1">
@@ -145320,6 +146006,7 @@
     <nd ref="50550"/>
     <nd ref="50551"/>
     <nd ref="50552"/>
+    <nd ref="71036"/>
     <nd ref="50553"/>
     <nd ref="50554"/>
     <nd ref="50555"/>
@@ -162923,6 +163610,342 @@
     <nd ref="70535"/>
     <nd ref="70534"/>
     <tag k="oneway" v="yes"/>
+    <tag k="railway" v="rail"/>
+  </way>
+  <way id="555" action="modify" version="1">
+    <nd ref="70705"/>
+    <nd ref="70706"/>
+    <nd ref="70707"/>
+    <nd ref="70775"/>
+    <nd ref="70708"/>
+    <nd ref="70776"/>
+    <nd ref="70709"/>
+    <nd ref="70710"/>
+    <nd ref="70711"/>
+    <nd ref="70712"/>
+    <nd ref="70713"/>
+    <nd ref="70714"/>
+    <nd ref="70715"/>
+    <nd ref="70716"/>
+    <nd ref="70717"/>
+    <nd ref="70718"/>
+    <nd ref="70719"/>
+    <nd ref="70720"/>
+    <nd ref="70721"/>
+    <nd ref="70722"/>
+    <nd ref="70724"/>
+    <nd ref="70723"/>
+    <nd ref="70725"/>
+    <nd ref="70726"/>
+    <nd ref="70727"/>
+    <nd ref="70728"/>
+    <nd ref="70729"/>
+    <nd ref="70730"/>
+    <nd ref="70731"/>
+    <nd ref="70732"/>
+    <nd ref="70733"/>
+    <nd ref="70734"/>
+    <nd ref="70735"/>
+    <nd ref="70736"/>
+    <nd ref="70737"/>
+    <nd ref="70738"/>
+    <nd ref="70739"/>
+    <nd ref="70740"/>
+    <nd ref="70741"/>
+    <nd ref="70742"/>
+    <nd ref="70743"/>
+    <nd ref="70744"/>
+    <nd ref="70745"/>
+    <nd ref="70746"/>
+    <nd ref="70747"/>
+    <nd ref="70748"/>
+    <nd ref="70749"/>
+    <nd ref="70750"/>
+    <nd ref="70751"/>
+    <nd ref="70752"/>
+    <nd ref="70753"/>
+    <nd ref="70754"/>
+    <nd ref="70755"/>
+    <nd ref="70756"/>
+    <nd ref="70757"/>
+    <nd ref="70758"/>
+    <nd ref="70759"/>
+    <nd ref="70760"/>
+    <nd ref="70761"/>
+    <nd ref="70762"/>
+    <nd ref="70763"/>
+    <nd ref="70764"/>
+    <nd ref="70765"/>
+    <nd ref="70766"/>
+    <nd ref="70767"/>
+    <nd ref="70768"/>
+    <nd ref="70769"/>
+    <nd ref="70770"/>
+    <nd ref="70771"/>
+    <nd ref="70772"/>
+    <nd ref="70773"/>
+    <nd ref="70774"/>
+    <nd ref="70777"/>
+    <nd ref="70778"/>
+    <nd ref="70779"/>
+    <nd ref="70780"/>
+    <nd ref="70781"/>
+    <nd ref="70782"/>
+    <nd ref="70783"/>
+    <nd ref="70784"/>
+    <nd ref="70785"/>
+    <nd ref="70786"/>
+    <nd ref="70787"/>
+    <nd ref="70788"/>
+    <nd ref="71037"/>
+    <nd ref="70789"/>
+    <nd ref="70790"/>
+    <nd ref="70791"/>
+    <nd ref="70792"/>
+    <nd ref="70793"/>
+    <nd ref="70794"/>
+    <nd ref="70795"/>
+    <nd ref="70796"/>
+    <nd ref="70797"/>
+    <nd ref="70798"/>
+    <nd ref="70799"/>
+    <nd ref="70800"/>
+    <nd ref="70801"/>
+    <nd ref="70802"/>
+    <nd ref="70803"/>
+    <nd ref="70804"/>
+    <nd ref="70805"/>
+    <nd ref="70806"/>
+    <nd ref="70807"/>
+    <nd ref="70808"/>
+    <nd ref="70809"/>
+    <nd ref="70810"/>
+    <nd ref="70811"/>
+    <nd ref="70812"/>
+    <nd ref="70813"/>
+    <nd ref="70814"/>
+    <nd ref="70815"/>
+    <nd ref="70816"/>
+    <nd ref="70817"/>
+    <nd ref="70818"/>
+    <nd ref="70819"/>
+    <nd ref="70820"/>
+    <nd ref="70821"/>
+    <nd ref="70822"/>
+    <nd ref="70823"/>
+    <nd ref="70824"/>
+    <nd ref="70825"/>
+    <nd ref="70826"/>
+    <nd ref="70827"/>
+    <nd ref="70828"/>
+    <nd ref="70829"/>
+    <nd ref="70830"/>
+    <nd ref="70831"/>
+    <nd ref="70832"/>
+    <nd ref="70833"/>
+    <nd ref="70834"/>
+    <nd ref="70835"/>
+    <nd ref="70836"/>
+    <nd ref="70837"/>
+    <nd ref="70838"/>
+    <nd ref="70839"/>
+    <nd ref="70840"/>
+    <nd ref="70841"/>
+    <nd ref="70842"/>
+    <nd ref="70843"/>
+    <nd ref="70844"/>
+    <nd ref="70845"/>
+    <nd ref="70846"/>
+    <nd ref="70847"/>
+    <nd ref="70848"/>
+    <nd ref="70849"/>
+    <nd ref="70850"/>
+    <nd ref="70884"/>
+    <nd ref="70851"/>
+    <nd ref="70852"/>
+    <nd ref="70853"/>
+    <nd ref="70854"/>
+    <nd ref="70855"/>
+    <nd ref="70856"/>
+    <nd ref="70857"/>
+    <nd ref="70858"/>
+    <nd ref="70859"/>
+    <nd ref="70860"/>
+    <nd ref="70861"/>
+    <nd ref="70862"/>
+    <nd ref="70863"/>
+    <nd ref="70864"/>
+    <nd ref="70865"/>
+    <nd ref="70866"/>
+    <nd ref="70867"/>
+    <nd ref="70868"/>
+    <nd ref="70869"/>
+    <nd ref="70870"/>
+    <nd ref="70871"/>
+    <nd ref="70872"/>
+    <nd ref="70873"/>
+    <nd ref="70874"/>
+    <nd ref="70875"/>
+    <nd ref="70882"/>
+    <nd ref="70876"/>
+    <nd ref="70877"/>
+    <nd ref="70878"/>
+    <nd ref="70883"/>
+    <nd ref="70879"/>
+    <nd ref="70880"/>
+    <nd ref="70881"/>
+    <nd ref="70885"/>
+    <nd ref="70886"/>
+    <nd ref="70887"/>
+    <nd ref="70888"/>
+    <nd ref="70889"/>
+    <nd ref="70890"/>
+    <nd ref="70891"/>
+    <nd ref="70892"/>
+    <nd ref="70893"/>
+    <nd ref="70894"/>
+    <nd ref="70895"/>
+    <nd ref="70896"/>
+    <nd ref="70897"/>
+    <nd ref="70898"/>
+    <nd ref="70899"/>
+    <nd ref="70900"/>
+    <nd ref="70901"/>
+    <nd ref="70902"/>
+    <nd ref="70903"/>
+    <nd ref="70904"/>
+    <nd ref="70905"/>
+    <nd ref="70906"/>
+    <nd ref="70907"/>
+    <nd ref="70908"/>
+    <nd ref="70909"/>
+    <nd ref="70910"/>
+    <nd ref="70911"/>
+    <nd ref="70912"/>
+    <nd ref="70913"/>
+    <nd ref="70915"/>
+    <nd ref="70914"/>
+    <nd ref="70916"/>
+    <nd ref="70917"/>
+    <nd ref="70918"/>
+    <nd ref="70919"/>
+    <nd ref="70920"/>
+    <nd ref="70921"/>
+    <nd ref="70922"/>
+    <nd ref="70923"/>
+    <nd ref="70924"/>
+    <nd ref="70925"/>
+    <nd ref="70926"/>
+    <nd ref="70927"/>
+    <nd ref="70928"/>
+    <nd ref="70929"/>
+    <nd ref="70930"/>
+    <nd ref="70931"/>
+    <nd ref="70932"/>
+    <nd ref="70933"/>
+    <nd ref="70934"/>
+    <nd ref="70935"/>
+    <nd ref="70936"/>
+    <nd ref="70937"/>
+    <nd ref="70938"/>
+    <nd ref="70939"/>
+    <nd ref="70940"/>
+    <nd ref="70941"/>
+    <nd ref="70942"/>
+    <nd ref="70943"/>
+    <nd ref="70944"/>
+    <nd ref="70945"/>
+    <nd ref="70946"/>
+    <nd ref="70947"/>
+    <nd ref="70948"/>
+    <nd ref="70949"/>
+    <nd ref="70950"/>
+    <nd ref="70951"/>
+    <nd ref="70952"/>
+    <nd ref="70953"/>
+    <nd ref="70954"/>
+    <nd ref="70955"/>
+    <nd ref="70956"/>
+    <nd ref="70957"/>
+    <nd ref="70958"/>
+    <nd ref="70959"/>
+    <nd ref="70960"/>
+    <nd ref="70961"/>
+    <nd ref="70962"/>
+    <nd ref="70963"/>
+    <nd ref="70964"/>
+    <nd ref="70965"/>
+    <nd ref="70966"/>
+    <nd ref="70967"/>
+    <nd ref="70968"/>
+    <nd ref="70969"/>
+    <nd ref="70970"/>
+    <nd ref="70971"/>
+    <nd ref="70972"/>
+    <nd ref="70973"/>
+    <nd ref="70975"/>
+    <nd ref="70974"/>
+    <nd ref="70976"/>
+    <nd ref="70977"/>
+    <nd ref="70978"/>
+    <nd ref="70979"/>
+    <nd ref="70980"/>
+    <nd ref="70981"/>
+    <nd ref="70982"/>
+    <nd ref="70983"/>
+    <nd ref="70984"/>
+    <nd ref="70985"/>
+    <nd ref="70986"/>
+    <nd ref="70987"/>
+    <nd ref="70988"/>
+    <nd ref="70989"/>
+    <nd ref="70990"/>
+    <nd ref="70991"/>
+    <nd ref="70992"/>
+    <nd ref="70993"/>
+    <nd ref="70994"/>
+    <nd ref="70995"/>
+    <nd ref="70996"/>
+    <nd ref="70997"/>
+    <nd ref="70998"/>
+    <nd ref="71003"/>
+    <nd ref="70999"/>
+    <nd ref="71000"/>
+    <nd ref="71001"/>
+    <nd ref="71002"/>
+    <nd ref="71004"/>
+    <nd ref="71005"/>
+    <nd ref="71006"/>
+    <nd ref="71007"/>
+    <nd ref="71008"/>
+    <nd ref="71009"/>
+    <nd ref="71010"/>
+    <nd ref="71011"/>
+    <nd ref="71012"/>
+    <nd ref="71013"/>
+    <nd ref="71014"/>
+    <nd ref="71015"/>
+    <nd ref="71016"/>
+    <nd ref="71017"/>
+    <nd ref="71018"/>
+    <nd ref="71019"/>
+    <nd ref="71020"/>
+    <nd ref="71021"/>
+    <nd ref="71022"/>
+    <nd ref="71023"/>
+    <nd ref="71024"/>
+    <nd ref="71025"/>
+    <nd ref="71026"/>
+    <nd ref="71027"/>
+    <nd ref="71028"/>
+    <nd ref="71029"/>
+    <nd ref="71030"/>
+    <nd ref="71031"/>
+    <nd ref="71032"/>
+    <nd ref="71033"/>
+    <nd ref="71034"/>
+    <nd ref="71035"/>
+    <nd ref="71036"/>
     <tag k="railway" v="rail"/>
   </way>
 </osm>
