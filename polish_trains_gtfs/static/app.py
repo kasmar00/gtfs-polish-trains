@@ -156,11 +156,11 @@ class PolishTrainsGTFS(App):
                     headers={"X-Api-Key": apikey},
                     params={"dateFrom": start_date.isoformat(), "dateTo": end_date.isoformat()},
                 ),
-                "geo.osm": LocalResource("data/geo.osm"),
+                "geo.osm": HTTPResource.get("https://raw.githubusercontent.com/MKuranowski/PolishTrainsGTFS/refs/heads/main/data/geo.osm"),
                 "bus_routes.yaml": LocalResource("data/bus_routes.yaml"),
-                "directions.yaml": LocalResource("data/directions.yaml"),
+                "directions.yaml": HTTPResource.get("https://raw.githubusercontent.com/MKuranowski/PolishTrainsGTFS/refs/heads/main/data/directions.yaml"),
                 "routes.yaml": LocalResource("data/routes.yaml"),
-                "route_extract.yaml": LocalResource("data/route_extract.yaml"),
+                "route_extract.yaml": HTTPResource.get("https://raw.githubusercontent.com/MKuranowski/PolishTrainsGTFS/refs/heads/main/data/route_extract.yaml"),
                 # Unused, shapes generated from OSRM
                 # "shapes.yaml": LocalResource("data/shapes.yaml"),
                 "platforms.json": HTTPResource.get(
