@@ -23,3 +23,15 @@ force_via:
   - from: "63073" # Koniecpol
     to: "62802" # Częstochowa Stradom
     via: [50.774119, 19.128919] # LK61 midpoint between Kucelinka and Częstochowa Stradom
+  - from: "33506"  # Warszawa Zachodnia
+    to: "34603"  # Sochaczew
+    via: [52.206269, 20.914975]  # Warszawa Włochy
+  - from: "34603"  # Sochaczew
+    to: "33506"  # Warszawa Zachodnia
+    via: [52.206269, 20.914975]  # Warszawa Włochy
+  - from: "33506"  # Warszawa Zachodnia
+    to: "34348"  # Ożarów Mazowiecki
+    via: [52.206269, 20.914975]  # Warszawa Włochy
+  - from: "34348"  # Ożarów Mazowiecki
+    to: "33506"  # Warszawa Zachodnia
+    via: [52.206269, 20.914975]  # Warszawa Włochy
