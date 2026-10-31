@@ -851,6 +851,7 @@ agencies:
         short_name: "RCC Ex"
         long_name: "Rail Cargo Carrier - Express"
         color: "E2002A"
+        type: 102
 
   - id: "RJ"
     name: "RegioJet"
