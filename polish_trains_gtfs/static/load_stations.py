@@ -190,9 +190,27 @@ class LoadStations(Task):
             if platform in FAKE_PLATFORMS:
                 self.move_departures(db, f"{station.id}_FALLBACK", trips)
             else:
-                lat, lon, accessible, single_sided = self.locate_platform(
-                    station, external_candidates, platform, track
+                external_platform = self.find_external_platform(
+                    external_candidates, platform, track
                 )
+                single_sided = (
+                    external_platform is not None and external_platform["single_track_platform"]
+                )
+                lat, lon, accessible = self.locate_platform(
+                    station, external_platform, platform, track
+                )
+                extra_fields = {"country": station.country, "stop_access": "0"}
+                if (
+                    external_platform
+                    and external_platform["exact_location"]
+                    and external_platform["location"]
+                ):
+                    # Exact platforms.json location, used to snap the stop to railway tracks
+                    rail_lon, rail_lat = external_platform["location"]
+                    extra_fields["rail_lat"], extra_fields["rail_lon"] = (
+                        str(rail_lat),
+                        str(rail_lon),
+                    )
                 db_platform = Stop(
                     id=f"{station.id}_RAIL_{platform}_{track}",
                     name=station.name,
@@ -204,7 +222,7 @@ class LoadStations(Task):
                     platform_code=self.platform_code(
                         single_sided, single_platform_station, platform, track
                     ),
-                    extra_fields_json=json.dumps({"country": station.country, "stop_access": "0"}),
+                    extra_fields_json=json.dumps(extra_fields),
                 )
                 db.create(db_platform)
                 self.move_departures(db, db_platform.id, trips)
@@ -212,27 +230,21 @@ class LoadStations(Task):
     def locate_platform(
         self,
         station: Station,
-        external_candidates: list[ExternalPlatform],
+        external_platform: ExternalPlatform | None,
         platform: str,
         track: str,
-    ) -> tuple[float, float, bool | None, bool]:
+    ) -> tuple[float, float, bool | None]:
         geo_platform = self.find_matching_platform(station, platform, track)
-
-        external_platform = self.find_external_platform(external_candidates, platform, track)
-
-        single_sided = False
-        if external_platform:
-            single_sided = external_platform["single_track_platform"]
 
         if geo_platform and geo_platform.track:
             self.location_sources["geo+track"] += 1
-            return geo_platform.lat, geo_platform.lon, geo_platform.accessible, single_sided
+            return geo_platform.lat, geo_platform.lon, geo_platform.accessible
 
         if external_platform:
             if external_platform["exact_location"] and external_platform["location"]:
                 self.location_sources["platforms.json"] += 1
                 location = external_platform["location"]
-                return location[1], location[0], station.accessible, single_sided
+                return location[1], location[0], station.accessible
             self.logger.debug(
                 "%s %s: skipping platforms.json location for platform %r track %r "
                 "(exact_location=%s)",
@@ -245,7 +257,7 @@ class LoadStations(Task):
 
         if geo_platform:
             self.location_sources["geo platform-only"] += 1
-            return geo_platform.lat, geo_platform.lon, geo_platform.accessible, single_sided
+            return geo_platform.lat, geo_platform.lon, geo_platform.accessible
 
         self.logger.debug(
             "%s %s: missing data for platform %r track %r",
@@ -255,7 +267,7 @@ class LoadStations(Task):
             track,
         )
         self.location_sources["station"] += 1
-        return station.lat, station.lon, station.accessible, single_sided
+        return station.lat, station.lon, station.accessible
 
     def platform_code(
         self, single_sided: bool, only_platform: bool, platform_number: str, track_number: str

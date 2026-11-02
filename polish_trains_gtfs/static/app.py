@@ -13,6 +13,7 @@ from .add_train_names import AddTrainNames
 from .assign_direction_id import AssignDirectionID
 from .curate_routes import CurateRoutes
 from .deduplicate_consecutive_times import DeduplicateConsecutiveTimes
+from .extended_route_types import ApplyExtendedRouteTypes
 from .extract_routes import ExtractRoutes
 from .fix_berlin_bus_replacement import FixBerlinBusReplacement
 from .generate_shapes import GenerateBusShapes, GenerateShapes
@@ -25,7 +26,6 @@ from .renumber_stop_times import RenumberStopTimes
 from .shift_negative_times import ShiftNegativeTimes
 from .split_bus_legs import SplitBusLegs
 from .util.apikey import get_apikey
-from .extended_route_types import ApplyExtendedRouteTypes
 
 GTFS_HEADERS = {
     "agency.txt": (
@@ -116,6 +116,7 @@ GTFS_HEADERS = {
         "shape_pt_lat",
         "shape_pt_lon",
         "shape_pt_sequence",
+        "shape_dist_traveled",
     ),
 }
 
@@ -166,6 +167,7 @@ class PolishTrainsGTFS(App):
                 "routes.yaml": LocalResource("data/routes.yaml"),
                 "route_extract.yaml": HTTPResource.get("https://raw.githubusercontent.com/MKuranowski/PolishTrainsGTFS/refs/heads/main/data/route_extract.yaml"),
                 "shapes.yaml": LocalResource("data/shapes.yaml"),
+                "railways.osm.pbf": LocalResource("osm/railways.osm.pbf"),
                 "platforms.json": HTTPResource.get(
                     "https://kasmar00.github.io/osm-plk-platform-validator/platforms-list.json"
                 ),
@@ -257,8 +259,8 @@ class PolishTrainsGTFS(App):
                     ),
                     task_name="SetStopTimezone",
                 ),
-                GenerateShapes("geo.osm", "shapes.yaml"),
-                # GenerateBusShapes("geo.osm"),
+                GenerateShapes("geo.osm", "shapes.yaml", pbf_resource="railways.osm.pbf"),
+                GenerateBusShapes("geo.osm"),
                 RemoveWaypoints(),
                 RenumberStopTimes(),
                 ExecuteSQL(
