@@ -59,12 +59,11 @@ class ShapeGenerator:
     def generate_leg(self, from_: int, to: int) -> Sequence[int]:
         nodes: Sequence[int] = []
         try:
-            nodes = self.graph.find_route(from_, to, without_turn_around=False)
+            nodes = self.graph.find_route(from_, to)
         except routx.StepLimitExceeded:
             pass
 
         if not nodes:
-            logger.error("No shape between nodes %d and %d", from_, to)
-            return [from_, to]
+            raise ValueError(f"No shape between nodes {from_} and {to}")
 
         return nodes
