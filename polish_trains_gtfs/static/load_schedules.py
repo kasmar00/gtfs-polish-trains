@@ -76,6 +76,12 @@ class LoadSchedules(Task):
                     is_authority=True,
                     is_data_source=True,
                 ),
+                Attribution(
+                    id="OSM",
+                    organization_name="© OpenStreetMap contributors",
+                    url="https://www.openstreetmap.org/copyright",
+                    is_data_source=True,
+                ),
             ),
         )
 

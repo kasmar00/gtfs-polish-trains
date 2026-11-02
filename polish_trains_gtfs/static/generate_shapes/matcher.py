@@ -1,28 +1,22 @@
 # SPDX-FileCopyrightText: 2026 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
-# Unused, shapes generated from OSRM
-
-# from collections import defaultdict
-from collections.abc import Iterable, Sequence
-from dataclasses import dataclass, field
+from collections.abc import Iterable, Mapping, Sequence
 from itertools import chain, product
 from typing import Any, Protocol, cast
 
-# import osmium
-# import osmium.filter
-# import osmium.osm
 import routx
 from impuls.model import Stop, StopTime, Trip
 from impuls.tools.types import StrPath
 
-from .model import MatchedNode, MatchedTrip
+from ...geo import Station, load_stations
+from .model import GraphTag, MatchedNode, MatchedTrip
 
 
 class Matcher(Protocol):
     def load(
         self,
-        graph: routx.Graph,
+        graphs: Mapping[GraphTag, routx.Graph],
         stops: Iterable[Stop],
         osm_path: StrPath,
         extra_config: Any,
@@ -30,46 +24,73 @@ class Matcher(Protocol):
     def match(self, trip: Trip, stop_times: Sequence[StopTime]) -> MatchedTrip | None: ...
 
 
-@dataclass
-class TrainStopPosition:
-    node_id: int
-    towards: set[str] = field(default_factory=set[str])
-    platforms: set[str] = field(default_factory=set[str])
-
-    def is_fallback(self) -> bool:
-        return not self.towards
-
-
 class TrainMatcher(Matcher):
     MAX_DISTANCE_KM = 0.5
+    geo_graph: routx.Graph
 
     def __init__(self) -> None:
-        self.force_via = dict[tuple[str, str], int]()
-        self.stop_to_node = dict[str, int]()
+        self.force_via = dict[GraphTag, dict[tuple[str, str], int]]()
+        self.stop_to_node = dict[GraphTag, dict[str, int]]()
+        self.stop_country = dict[str, str]()
+        self.foreign_stations = dict[str, Station]()
 
     def load(
         self,
-        graph: routx.Graph,
+        graphs: Mapping[GraphTag, routx.Graph],
         stops: Iterable[Stop],
         osm_path: StrPath,
         extra_config: Any,
     ) -> None:
         self.force_via.clear()
         self.stop_to_node.clear()
+        self.stop_country.clear()
+        self.foreign_stations.clear()
+        self.geo_graph = graphs[GraphTag.GEO_OSM]
 
-        kd_tree = routx.KDTree.build(graph)
-        self.load_force_via(kd_tree, extra_config)
+        if GraphTag.RAILWAYS_PBF not in graphs:
+            raise ValueError("TrainMatcher requires the railways.osm.pbf graph")
+
+        kd_trees = {tag: routx.KDTree.build(graph) for tag, graph in graphs.items()}
+        for tag, kd_tree in kd_trees.items():
+            self.force_via[tag] = self.load_force_via(kd_tree, extra_config)
+            self.stop_to_node[tag] = {}
+
+        stations = load_stations(osm_path)
         for stop in stops:
-            if "BUS" not in stop.id:
-                candidate = kd_tree.find_nearest_node(stop.lat, stop.lon)
-                distance = routx.earth_distance(stop.lat, stop.lon, candidate.lat, candidate.lon)
-                if distance <= self.MAX_DISTANCE_KM:
-                    self.stop_to_node[stop.id] = candidate.id
-        # self.load_specific_stop_positions(osm_path)
-        # self.load_generic_stop_positions(osm_path)
+            if "BUS" in stop.id:
+                continue
 
-    def load_force_via(self, kd_tree: routx.KDTree, extra_config: Any) -> None:
-        self.force_via.clear()
+            country = stop.get_extra_field("country") or "PL"
+            self.stop_country[stop.id] = country
+
+            if country == "PL":
+                rail_lat = stop.get_extra_field("rail_lat")
+                rail_lon = stop.get_extra_field("rail_lon")
+                if rail_lat and rail_lon:
+                    pbf_position = float(rail_lat), float(rail_lon)
+                else:
+                    pbf_position = stop.lat, stop.lon
+                self._snap(GraphTag.RAILWAYS_PBF, kd_trees, stop.id, *pbf_position)
+                self._snap(GraphTag.GEO_OSM, kd_trees, stop.id, stop.lat, stop.lon)
+            elif station := stations.get(_extract_station_id(stop.id)):
+                self.foreign_stations[stop.id] = station
+
+    def _snap(
+        self,
+        tag: GraphTag,
+        kd_trees: Mapping[GraphTag, routx.KDTree],
+        stop_id: str,
+        lat: float,
+        lon: float,
+    ) -> None:
+        candidate = kd_trees[tag].find_nearest_node(lat, lon)
+        distance = routx.earth_distance(lat, lon, candidate.lat, candidate.lon)
+        if distance <= self.MAX_DISTANCE_KM:
+            self.stop_to_node[tag][stop_id] = candidate.id
+
+    @staticmethod
+    def load_force_via(kd_tree: routx.KDTree, extra_config: Any) -> dict[tuple[str, str], int]:
+        force_via = dict[tuple[str, str], int]()
         for cfg in extra_config.get("force_via", []):
             node_id = kd_tree.find_nearest_node(*cfg["via"]).id
             from_ids = cast(list[str], _ensure_list(cfg["from"]))
@@ -81,94 +102,87 @@ class TrainMatcher(Matcher):
             )
 
             for from_, to in pairs:
-                self.force_via[from_, to] = node_id
-
-    # def load_specific_stop_positions(self, osm_path: StrPath) -> None:
-    #     fp = (
-    #         osmium.FileProcessor(osm_path)
-    #         .with_filter(osmium.filter.EntityFilter(osmium.osm.NODE))
-    #         .with_filter(osmium.filter.TagFilter(("public_transport", "stop_position")))
-    #     )
-
-    #     for node in fp:
-    #         assert isinstance(node, osmium.osm.Node)
-
-    #         station_id = node.tags.get("ref:station") or ""
-    #         if not station_id:
-    #             continue
-
-    #         platforms = set(_unpack_osm_list(node.tags.get("platforms") or ""))
-    #         match node.tags.get("towards"):
-    #             case "fallback" | "" | None:
-    #                 towards = set[str]()
-    #             case lst:
-    #                 towards = set(_unpack_osm_list(lst))
-
-    #         self.stop_positions[station_id].append(TrainStopPosition(node.id, towards, platforms))
-
-    # def load_generic_stop_positions(self, osm_path: StrPath) -> None:
-    #     fp = (
-    #         osmium.FileProcessor(osm_path)
-    #         .with_filter(osmium.filter.EntityFilter(osmium.osm.NODE))
-    #         .with_filter(osmium.filter.TagFilter(("railway", "station")))
-    #     )
-
-    #     for node in fp:
-    #         assert isinstance(node, osmium.osm.Node)
-
-    #         station_id = node.tags.get("ref") or ""
-    #         if station_id and station_id not in self.stop_positions:
-    #             self.stop_positions[station_id] = [TrainStopPosition(node.id)]
+                force_via[from_, to] = node_id
+        return force_via
 
     def match(self, trip: Trip, stop_times: Sequence[StopTime]) -> MatchedTrip | None:
-        if any(st.stop_id not in self.stop_to_node for st in stop_times):
-            return None  # Don't generate a shape without a matched node in the graph
+        if len(stop_times) < 2:
+            return None
 
         nodes = list[MatchedNode]()
-        for i, stop_time in enumerate(stop_times):
-            # Check and insert a forced via node
-            if i > 0:
-                prev_station = _extract_station_id(stop_times[i - 1].stop_id)
-                station = _extract_station_id(stop_time.stop_id)
-                if via_node := self.force_via.get((prev_station, station)):
-                    nodes.append(MatchedNode(via_node))
+        previous_graph: GraphTag | None = None
+        for i in range(1, len(stop_times)):
+            prev, cur = stop_times[i - 1], stop_times[i]
+            graph = self.leg_graph(prev.stop_id, cur.stop_id)
+            prev_node = self.resolve_node(graph, stop_times, i - 1)
+            cur_node = self.resolve_node(graph, stop_times, i)
+            if prev_node is None or cur_node is None:
+                return None  # Don't generate a shape without a matched node in the graph
 
-            # Insert a node for the stop_time
-            nodes.append(self.match_node(stop_times, i))
+            if previous_graph is None:
+                nodes.append(MatchedNode(prev_node, graph, prev.stop_sequence))
+            elif graph != previous_graph:
+                nodes.append(MatchedNode(prev_node, graph))
 
-        return MatchedTrip(trip.id, tuple(nodes))
+            via_pair = (_extract_station_id(prev.stop_id), _extract_station_id(cur.stop_id))
+            if (via_node := self.force_via[graph].get(via_pair)) is not None:
+                nodes.append(MatchedNode(via_node, graph))
 
-    def match_node(self, stop_times: Sequence[StopTime], i: int) -> MatchedNode:
-        stop_time = stop_times[i]
-        return MatchedNode(self.stop_to_node[stop_time.stop_id], stop_time.stop_sequence)
-        station_id = _extract_station_id(stop_time.stop_id)
-        candidates = self.stop_positions[station_id]
+            nodes.append(MatchedNode(cur_node, graph, cur.stop_sequence))
+            previous_graph = graph
 
-        # Fast track stations with single node
-        if len(candidates) <= 1:
-            return MatchedNode(candidates[0].node_id, stop_time.stop_sequence)
+        stop_ids = tuple(st.stop_id for st in stop_times)
+        return MatchedTrip(trip.id, tuple(nodes), stop_ids)
 
-        # Try to match on platform
+    def resolve_node(
+        self,
+        graph: GraphTag,
+        stop_times: Sequence[StopTime],
+        index: int,
+    ) -> int | None:
+        stop_time = stop_times[index]
+        station = self.foreign_stations.get(stop_time.stop_id)
+        if station is None:
+            return self.stop_to_node[graph].get(stop_time.stop_id)
+        return self.resolve_foreign_node(station, stop_times, index)
+
+    def resolve_foreign_node(
+        self,
+        station: Station,
+        stop_times: Sequence[StopTime],
+        index: int,
+    ) -> int | None:
+        candidates = [p for p in station.stop_positions if p.node_id in self.geo_graph]
+        if len(candidates) == 1:
+            return candidates[0].node_id
+
+        platform = stop_times[index].platform
+        if platform:
+            for candidate in candidates:
+                if platform in candidate.platforms:
+                    return candidate.node_id
+
+        neighbours = {
+            _extract_station_id(stop_times[i].stop_id)
+            for i in (index - 1, index + 1)
+            if 0 <= i < len(stop_times)
+        }
         for candidate in candidates:
-            if stop_time.platform in candidate.platforms:
-                return MatchedNode(candidate.node_id, stop_time.stop_sequence)
+            if neighbours.intersection(candidate.towards):
+                return candidate.node_id
 
-        # Try to match on "towards"
-        prev_station_id = _extract_station_id(stop_times[i - 1].stop_id) if i >= 1 else None
-        next_station_id = (
-            _extract_station_id(stop_times[i + 1].stop_id) if (i + 1) < len(stop_times) else None
-        )
         for candidate in candidates:
-            if next_station_id in candidate.towards or prev_station_id in candidate.towards:
-                return MatchedNode(candidate.node_id, stop_time.stop_sequence)
+            if not candidate.towards or "fallback" in candidate.towards:
+                return candidate.node_id
 
-        # Use the fallback candidate
-        for candidate in candidates:
-            if candidate.is_fallback():
-                return MatchedNode(candidate.node_id, stop_time.stop_sequence)
+        return station.node_id if station.node_id in self.geo_graph else None
 
-        # No fallback stop_position - raise error
-        raise ValueError(f"no fallback public_transport=stop_position at station {station_id}")
+    def leg_graph(self, from_stop_id: str, to_stop_id: str) -> GraphTag:
+        if self.stop_country.get(from_stop_id, "PL") != "PL":
+            return GraphTag.GEO_OSM
+        if self.stop_country.get(to_stop_id, "PL") != "PL":
+            return GraphTag.GEO_OSM
+        return GraphTag.RAILWAYS_PBF
 
 
 class BusMatcher(Matcher):
@@ -179,12 +193,12 @@ class BusMatcher(Matcher):
 
     def load(
         self,
-        graph: routx.Graph,
+        graphs: Mapping[GraphTag, routx.Graph],
         stops: Iterable[Stop],
         osm_path: StrPath,
         extra_config: Any,
     ) -> None:
-        kd_tree = routx.KDTree.build(graph)
+        kd_tree = routx.KDTree.build(graphs[GraphTag.GEO_OSM])
         self.stop_to_node.clear()
         for stop in stops:
             if "BUS" in stop.id:
@@ -197,14 +211,16 @@ class BusMatcher(Matcher):
         matched_nodes = list[MatchedNode]()
         for stop_time in stop_times:
             if node_id := self.stop_to_node.get(stop_time.stop_id):
-                matched_nodes.append(MatchedNode(node_id, stop_time.stop_sequence))
+                matched_nodes.append(
+                    MatchedNode(node_id, GraphTag.GEO_OSM, stop_time.stop_sequence)
+                )
             else:
                 return None  # Don't generate a shape without a matched node in the graph
-        return MatchedTrip(trip.id, tuple(matched_nodes))
-
-
-# def _unpack_osm_list(value: str, separator: str = ";") -> list[str]:
-#     return value.split(separator) if value else []
+        return MatchedTrip(
+            trip.id,
+            tuple(matched_nodes),
+            tuple(st.stop_id for st in stop_times),
+        )
 
 
 def _ensure_list(value: Any) -> list[Any]:

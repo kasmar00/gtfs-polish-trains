@@ -6,18 +6,7 @@
 # Requires curl and osmium-tool.
 
 REGIONS := \
-	europe/poland \
-	europe/austria \
-	europe/czech-republic \
-	europe/germany/bayern \
-	europe/germany/berlin \
-	europe/germany/brandenburg \
-	europe/germany/mecklenburg-vorpommern \
-	europe/germany/sachsen \
-	europe/hungary \
-	europe/lithuania \
-	europe/slovakia \
-	europe/ukraine
+	europe/poland
 
 NAMES := $(notdir $(REGIONS))
 DOWNLOADS := $(addsuffix .osm.pbf,$(NAMES))
@@ -33,7 +22,7 @@ railways.osm.pbf: $(FILTERED)
 	osmium merge --overwrite -o $@ $^
 
 %.railways.pbf: %.osm.pbf
-	osmium tags-filter --overwrite -o $@ $< w/railway
+	osmium tags-filter --overwrite -o $@ $< w/railway=rail,construction
 
 # All missing extracts are fetched by a single parallel curl, as separate concurrent
 # curl processes garble each other's progress bars.
