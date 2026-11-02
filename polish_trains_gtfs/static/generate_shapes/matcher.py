@@ -3,15 +3,15 @@
 
 # Unused, shapes generated from OSRM
 
-from collections import defaultdict
+# from collections import defaultdict
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from itertools import chain, product
 from typing import Any, Protocol, cast
 
-import osmium
-import osmium.filter
-import osmium.osm
+# import osmium
+# import osmium.filter
+# import osmium.osm
 import routx
 from impuls.model import Stop, StopTime, Trip
 from impuls.tools.types import StrPath
@@ -41,9 +41,11 @@ class TrainStopPosition:
 
 
 class TrainMatcher(Matcher):
+    MAX_DISTANCE_KM = 0.5
+
     def __init__(self) -> None:
         self.force_via = dict[tuple[str, str], int]()
-        self.stop_positions = defaultdict[str, list[TrainStopPosition]](list)
+        self.stop_to_node = dict[str, int]()
 
     def load(
         self,
@@ -53,11 +55,18 @@ class TrainMatcher(Matcher):
         extra_config: Any,
     ) -> None:
         self.force_via.clear()
-        self.stop_positions.clear()
+        self.stop_to_node.clear()
 
-        self.load_force_via(routx.KDTree.build(graph), extra_config)
-        self.load_specific_stop_positions(osm_path)
-        self.load_generic_stop_positions(osm_path)
+        kd_tree = routx.KDTree.build(graph)
+        self.load_force_via(kd_tree, extra_config)
+        for stop in stops:
+            if "BUS" not in stop.id:
+                candidate = kd_tree.find_nearest_node(stop.lat, stop.lon)
+                distance = routx.earth_distance(stop.lat, stop.lon, candidate.lat, candidate.lon)
+                if distance <= self.MAX_DISTANCE_KM:
+                    self.stop_to_node[stop.id] = candidate.id
+        # self.load_specific_stop_positions(osm_path)
+        # self.load_generic_stop_positions(osm_path)
 
     def load_force_via(self, kd_tree: routx.KDTree, extra_config: Any) -> None:
         self.force_via.clear()
@@ -74,44 +83,47 @@ class TrainMatcher(Matcher):
             for from_, to in pairs:
                 self.force_via[from_, to] = node_id
 
-    def load_specific_stop_positions(self, osm_path: StrPath) -> None:
-        fp = (
-            osmium.FileProcessor(osm_path)
-            .with_filter(osmium.filter.EntityFilter(osmium.osm.NODE))
-            .with_filter(osmium.filter.TagFilter(("public_transport", "stop_position")))
-        )
+    # def load_specific_stop_positions(self, osm_path: StrPath) -> None:
+    #     fp = (
+    #         osmium.FileProcessor(osm_path)
+    #         .with_filter(osmium.filter.EntityFilter(osmium.osm.NODE))
+    #         .with_filter(osmium.filter.TagFilter(("public_transport", "stop_position")))
+    #     )
 
-        for node in fp:
-            assert isinstance(node, osmium.osm.Node)
+    #     for node in fp:
+    #         assert isinstance(node, osmium.osm.Node)
 
-            station_id = node.tags.get("ref:station") or ""
-            if not station_id:
-                continue
+    #         station_id = node.tags.get("ref:station") or ""
+    #         if not station_id:
+    #             continue
 
-            platforms = set(_unpack_osm_list(node.tags.get("platforms") or ""))
-            match node.tags.get("towards"):
-                case "fallback" | "" | None:
-                    towards = set[str]()
-                case lst:
-                    towards = set(_unpack_osm_list(lst))
+    #         platforms = set(_unpack_osm_list(node.tags.get("platforms") or ""))
+    #         match node.tags.get("towards"):
+    #             case "fallback" | "" | None:
+    #                 towards = set[str]()
+    #             case lst:
+    #                 towards = set(_unpack_osm_list(lst))
 
-            self.stop_positions[station_id].append(TrainStopPosition(node.id, towards, platforms))
+    #         self.stop_positions[station_id].append(TrainStopPosition(node.id, towards, platforms))
 
-    def load_generic_stop_positions(self, osm_path: StrPath) -> None:
-        fp = (
-            osmium.FileProcessor(osm_path)
-            .with_filter(osmium.filter.EntityFilter(osmium.osm.NODE))
-            .with_filter(osmium.filter.TagFilter(("railway", "station")))
-        )
+    # def load_generic_stop_positions(self, osm_path: StrPath) -> None:
+    #     fp = (
+    #         osmium.FileProcessor(osm_path)
+    #         .with_filter(osmium.filter.EntityFilter(osmium.osm.NODE))
+    #         .with_filter(osmium.filter.TagFilter(("railway", "station")))
+    #     )
 
-        for node in fp:
-            assert isinstance(node, osmium.osm.Node)
+    #     for node in fp:
+    #         assert isinstance(node, osmium.osm.Node)
 
-            station_id = node.tags.get("ref") or ""
-            if station_id and station_id not in self.stop_positions:
-                self.stop_positions[station_id] = [TrainStopPosition(node.id)]
+    #         station_id = node.tags.get("ref") or ""
+    #         if station_id and station_id not in self.stop_positions:
+    #             self.stop_positions[station_id] = [TrainStopPosition(node.id)]
 
-    def match(self, trip: Trip, stop_times: Sequence[StopTime]) -> MatchedTrip:
+    def match(self, trip: Trip, stop_times: Sequence[StopTime]) -> MatchedTrip | None:
+        if any(st.stop_id not in self.stop_to_node for st in stop_times):
+            return None  # Don't generate a shape without a matched node in the graph
+
         nodes = list[MatchedNode]()
         for i, stop_time in enumerate(stop_times):
             # Check and insert a forced via node
@@ -128,6 +140,7 @@ class TrainMatcher(Matcher):
 
     def match_node(self, stop_times: Sequence[StopTime], i: int) -> MatchedNode:
         stop_time = stop_times[i]
+        return MatchedNode(self.stop_to_node[stop_time.stop_id], stop_time.stop_sequence)
         station_id = _extract_station_id(stop_time.stop_id)
         candidates = self.stop_positions[station_id]
 
@@ -190,8 +203,8 @@ class BusMatcher(Matcher):
         return MatchedTrip(trip.id, tuple(matched_nodes))
 
 
-def _unpack_osm_list(value: str, separator: str = ";") -> list[str]:
-    return value.split(separator) if value else []
+# def _unpack_osm_list(value: str, separator: str = ";") -> list[str]:
+#     return value.split(separator) if value else []
 
 
 def _ensure_list(value: Any) -> list[Any]:
