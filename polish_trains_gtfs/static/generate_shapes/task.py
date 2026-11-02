@@ -29,7 +29,8 @@ class GenerateShapes(Task):
 
     def execute(self, r: TaskRuntime) -> None:
         # 1. Load resources
-        osm_path = r.resources[self.graph_resource].stored_at
+        # osm_path = r.resources[self.graph_resource].stored_at
+        osm_path = "./osm/railways.osm.pbf"
         extra_config = (  # type: ignore
             r.resources[self.extra_config_resource].yaml() if self.extra_config_resource else {}
         )
@@ -51,12 +52,13 @@ class GenerateShapes(Task):
         matched_trips = self.match_trips(r.db, matcher, unmatched_trips)
         self.logger.debug(
             "Matched %d / %d (%.2f %%) trips",
-            len(unmatched_trips),
             len(matched_trips),
+            len(unmatched_trips),
             100 * len(matched_trips) / len(unmatched_trips),
         )
-        if not matched_trips:
-            return  # nothing to do
+        matched_ids = {t.trip_id for t in matched_trips}
+        skipped_unmatched = [t.id for t in unmatched_trips if t.id not in matched_ids]
+        skipped_unroutable = list[str]()
 
         # 6. Group trips by the same sequence of nodes
         self.logger.debug("Grouping trips with the same shape")
@@ -76,22 +78,58 @@ class GenerateShapes(Task):
                         len(grouped_trips),
                         100 * shape_id / len(grouped_trips),
                     )
+                try:
+                    shape = generator.generate(nodes)
+                    shape.insert_into(r.db)
+                    shape.apply_for_many(r.db, trips)
+                except ValueError as e:
+                    self.logger.warning("%s; skipping shape for trips: %s", e, trips)
+                    skipped_unroutable.extend(trips)
 
-                shape = generator.generate(nodes)
-                shape.insert_into(r.db)
-                shape.apply_for_many(r.db, trips)
+        self.log_skipped(len(unmatched_trips), skipped_unmatched, skipped_unroutable)
+
+    def log_skipped(
+        self,
+        total: int,
+        skipped_unmatched: list[str],
+        skipped_unroutable: list[str],
+    ) -> None:
+        skipped = len(skipped_unmatched) + len(skipped_unroutable)
+        if not skipped:
+            return
+        self.logger.warning(
+            "Skipped shapes for %d / %d (%.2f %%) trips: "
+            "%d with a stop too far from the graph, %d with no route between stops",
+            skipped,
+            total,
+            100 * skipped / total,
+            len(skipped_unmatched),
+            len(skipped_unroutable),
+        )
+        if skipped_unmatched:
+            self.logger.warning("Trips with a stop too far from the graph: %s", skipped_unmatched)
+        if skipped_unroutable:
+            self.logger.warning("Trips with no route between stops: %s", skipped_unroutable)
 
     def load_graph(self, osm_path: StrPath) -> routx.Graph:
         g = routx.Graph()
-        g.add_from_osm_file(
-            osm_path,
-            self.get_routx_profile(),
-            format=routx.OsmFormat.XML,
-        )
+        g.add_from_osm_file(osm_path, self.get_routx_profile())
         return g
 
-    def get_routx_profile(self) -> routx.OsmProfile:
-        return routx.OsmProfile.RAILWAY
+    def get_routx_profile(self) -> routx.OsmProfile | routx.OsmCustomProfile:
+        # Like routx.OsmProfile.RAILWAY, but also allows (discouraged) routing over
+        # lines under construction, as OSM lags behind reopened lines.
+        return routx.OsmCustomProfile(
+            name="train",
+            penalties=[
+                routx.OsmPenalty("railway", "rail", 1.0),
+                routx.OsmPenalty("railway", "light_rail", 1.0),
+                routx.OsmPenalty("railway", "subway", 1.0),
+                routx.OsmPenalty("railway", "narrow_gauge", 1.0),
+                routx.OsmPenalty("railway", "construction", 2.0),
+            ],
+            access=["access", "train"],
+        )
 
     def load_matcher(
         self,

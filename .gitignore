@@ -7,3 +7,4 @@ _impuls_workspace/
 polish_trains.zip
 polish_trains*.pb
 polish_trains*.json
+/osm/*.pbf
