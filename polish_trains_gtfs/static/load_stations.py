@@ -185,9 +185,26 @@ class LoadStations(Task):
             if platform in FAKE_PLATFORMS:
                 self.move_departures(db, f"{station.id}_FALLBACK", trips)
             else:
-                lat, lon, accessible = self.locate_platform(
-                    station, external_candidates, platform, track
+                external_platform = (
+                    self.find_external_platform(external_candidates, platform, track)
+                    if track
+                    else None
                 )
+                lat, lon, accessible = self.locate_platform(
+                    station, external_platform, platform, track
+                )
+                extra_fields = {"country": station.country, "stop_access": "0"}
+                if (
+                    external_platform
+                    and external_platform["exact_location"]
+                    and external_platform["location"]
+                ):
+                    # Exact platforms.json location, used to snap the stop to railway tracks
+                    rail_lon, rail_lat = external_platform["location"]
+                    extra_fields["rail_lat"], extra_fields["rail_lon"] = (
+                        str(rail_lat),
+                        str(rail_lon),
+                    )
                 db_platform = Stop(
                     id=f"{station.id}_RAIL_{platform}_{track}",
                     name=station.name,
@@ -197,7 +214,7 @@ class LoadStations(Task):
                     location_type=Stop.LocationType.STOP,
                     parent_station=station.id,
                     platform_code=f"{platform}/{track}" if track else platform,
-                    extra_fields_json=json.dumps({"country": station.country, "stop_access": "0"}),
+                    extra_fields_json=json.dumps(extra_fields),
                 )
                 db.create(db_platform)
                 self.move_departures(db, db_platform.id, trips)
@@ -205,7 +222,7 @@ class LoadStations(Task):
     def locate_platform(
         self,
         station: Station,
-        external_candidates: list[ExternalPlatform],
+        external_platform: ExternalPlatform | None,
         platform: str,
         track: str,
     ) -> tuple[float, float, bool | None]:
@@ -215,9 +232,6 @@ class LoadStations(Task):
             self.location_sources["geo+track"] += 1
             return geo_platform.lat, geo_platform.lon, geo_platform.accessible
 
-        external_platform = (
-            self.find_external_platform(external_candidates, platform, track) if track else None
-        )
         if external_platform:
             if external_platform["exact_location"] and external_platform["location"]:
                 self.location_sources["platforms.json"] += 1
