@@ -132,7 +132,10 @@ class TrainMatcher(Matcher):
             previous_graph = graph
 
         stop_ids = tuple(st.stop_id for st in stop_times)
-        return MatchedTrip(trip.id, tuple(nodes), stop_ids)
+        reference_nodes = tuple(
+            self.resolve_node(GraphTag.GEO_OSM, stop_times, i) for i in range(len(stop_times))
+        )
+        return MatchedTrip(trip.id, tuple(nodes), stop_ids, reference_nodes)
 
     def resolve_node(
         self,
@@ -220,6 +223,7 @@ class BusMatcher(Matcher):
             trip.id,
             tuple(matched_nodes),
             tuple(st.stop_id for st in stop_times),
+            tuple(n.node_id for n in matched_nodes),
         )
 
 

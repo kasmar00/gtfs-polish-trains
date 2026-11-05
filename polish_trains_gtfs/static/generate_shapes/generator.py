@@ -98,3 +98,13 @@ class ShapeGenerator:
             return [from_, to]
 
         return nodes
+
+    def route_length_km(self, graph: GraphTag, from_: int, to: int) -> float | None:
+        try:
+            nodes = self.graphs[graph].find_route(from_, to)
+        except routx.StepLimitExceeded:
+            return None
+        if not nodes:
+            return None
+        points = [self.graphs[graph][node_id] for node_id in nodes]
+        return sum(routx.earth_distance(a.lat, a.lon, b.lat, b.lon) for a, b in pairwise(points))

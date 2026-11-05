@@ -3,6 +3,7 @@
 
 from collections import defaultdict
 from collections.abc import Sequence
+from itertools import pairwise
 from typing import cast
 
 import routx
@@ -12,20 +13,25 @@ from impuls.tools.types import StrPath
 
 from .generator import ShapeGenerator
 from .matcher import BusMatcher, Matcher, TrainMatcher
-from .model import GraphTag, MatchedNode, MatchedTrip
+from .model import GeneratedShape, GraphTag, MatchedNode, MatchedTrip
 
 
 class GenerateShapes(Task):
+    MAX_STRAIGHT_LINE_DETOUR = 2.0
+    MAX_GEO_OSM_DETOUR = 1.5
+
     def __init__(
         self,
         graph_resource: str,
         extra_config_resource: str | None = None,
         pbf_resource: str | None = None,
+        detours_path: StrPath | None = None,
     ) -> None:
         super().__init__()
         self.graph_resource = graph_resource
         self.extra_config_resource = extra_config_resource
         self.pbf_resource = pbf_resource
+        self.detours_path = detours_path
 
     def execute(self, r: TaskRuntime) -> None:
         # 1. Load resources
@@ -77,6 +83,8 @@ class GenerateShapes(Task):
         # 7. Generate shapes for every unique sequence of nodes
         self.logger.info("Generating %d shapes", len(grouped_trips))
         generator = ShapeGenerator(graphs, self.get_shape_id_prefix())
+        skipped_detour = list[str]()
+        detour_polylines = dict[str, str]()
         with r.db.transaction():
             for shape_id, (nodes, trips) in enumerate(grouped_trips.items()):
                 if (shape_id + 1) % 50 == 0:
@@ -87,6 +95,14 @@ class GenerateShapes(Task):
                         100 * shape_id / len(grouped_trips),
                     )
                 shape = generator.generate(nodes)
+                if self.should_check_detours() and self.has_detour(generator, shape, trips[0]):
+                    trip_ids = [t.trip_id for t in trips]
+                    skipped_detour.extend(trip_ids)
+                    detour_polylines[shape.shape_id] = shape.encode_polyline()
+                    self.logger.warning(
+                        "Dropped shape %s with a detour for trips: %s", shape.shape_id, trip_ids
+                    )
+                    continue
                 shape.insert_into(r.db)
 
                 # One shape can serve trips calling at different stops that snapped to the same
@@ -105,9 +121,13 @@ class GenerateShapes(Task):
                 generator.connector_count,
                 generator.max_connector_km,
             )
-        self.log_skipped(len(unmatched_trips), skipped_unmatched)
+        self.log_skipped_unmatched(len(unmatched_trips), skipped_unmatched)
+        self.log_skipped_detour(len(unmatched_trips), skipped_detour)
+        if self.detours_path is not None:
+            with open(self.detours_path, "w", encoding="utf-8") as f:
+                f.writelines(f"{id}\t{line}\n" for id, line in detour_polylines.items())
 
-    def log_skipped(self, total: int, skipped_unmatched: list[str]) -> None:
+    def log_skipped_unmatched(self, total: int, skipped_unmatched: list[str]) -> None:
         if not skipped_unmatched:
             return
         self.logger.warning(
@@ -118,6 +138,40 @@ class GenerateShapes(Task):
             100 * len(skipped_unmatched) / total,
         )
         self.logger.warning("Trips with unmatched stops: %s", skipped_unmatched)
+
+    def has_detour(
+        self,
+        generator: ShapeGenerator,
+        shape: GeneratedShape,
+        trip: MatchedTrip,
+    ) -> bool:
+        """Checks if any leg of the shape is longer than MAX_STRAIGHT_LINE_DETOUR times the
+        straight line between its stops, and also longer than MAX_GEO_OSM_DETOUR times
+        the route between them on geo.osm (or there is no such route)."""
+        reference_legs = pairwise(trip.reference_nodes)
+        for (start, end), (from_node, to_node) in zip(shape.legs(), reference_legs, strict=True):
+            length = end.distance - start.distance
+            if length <= self.MAX_STRAIGHT_LINE_DETOUR * start.distance_to_km(end.lat, end.lon):
+                continue
+            if from_node is None or to_node is None:
+                return True
+            reference = generator.route_length_km(GraphTag.GEO_OSM, from_node, to_node)
+            if reference is None or length > self.MAX_GEO_OSM_DETOUR * reference:
+                return True
+        return False
+
+    def log_skipped_detour(self, total: int, skipped_detour: list[str]) -> None:
+        if not skipped_detour:
+            return
+        self.logger.warning(
+            "Dropped shapes for %d / %d (%.2f %%) trips with a leg longer than "
+            "%.1fx the straight line and %.1fx the geo.osm route between stops",
+            len(skipped_detour),
+            total,
+            100 * len(skipped_detour) / total,
+            self.MAX_STRAIGHT_LINE_DETOUR,
+            self.MAX_GEO_OSM_DETOUR,
+        )
 
     def load_graph(self, osm_path: StrPath) -> routx.Graph:
         g = routx.Graph()
@@ -159,6 +213,9 @@ class GenerateShapes(Task):
     def get_shape_id_prefix(self) -> str:
         return "RAIL_"
 
+    def should_check_detours(self) -> bool:
+        return True
+
 
 class GenerateBusShapes(GenerateShapes):
     def get_routx_profile(self) -> routx.OsmProfile:
@@ -172,6 +229,9 @@ class GenerateBusShapes(GenerateShapes):
 
     def get_shape_id_prefix(self) -> str:
         return "BUS_"
+
+    def should_check_detours(self) -> bool:
+        return False
 
 
 def _select_trips_with_route_type(db: DBConnection, typ: Route.Type) -> list[Trip]:

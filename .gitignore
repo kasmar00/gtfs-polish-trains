@@ -7,4 +7,5 @@ _impuls_workspace/
 polish_trains.zip
 polish_trains*.pb
 polish_trains*.json
+polish_trains_detours.tsv
 /osm/*.pbf

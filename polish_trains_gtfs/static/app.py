@@ -257,7 +257,12 @@ class PolishTrainsGTFS(App):
                     ),
                     task_name="SetStopTimezone",
                 ),
-                GenerateShapes("geo.osm", "shapes.yaml", pbf_resource="railways.osm.pbf"),
+                GenerateShapes(
+                    "geo.osm",
+                    "shapes.yaml",
+                    pbf_resource="railways.osm.pbf",
+                    detours_path="polish_trains_detours.tsv",
+                ),
                 GenerateBusShapes("geo.osm"),
                 RemoveWaypoints(),
                 RenumberStopTimes(),
