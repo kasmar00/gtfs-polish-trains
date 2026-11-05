@@ -1,12 +1,14 @@
 # SPDX-FileCopyrightText: 2026 Mikołaj Kuranowski
 # SPDX-License-Identifier: MIT
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass, field
 from enum import Enum, auto
+from itertools import pairwise
 from math import cos, nan, radians
 from typing import ClassVar
 
+import polyline
 from impuls import DBConnection
 from routx import earth_distance
 
@@ -28,6 +30,7 @@ class MatchedTrip:
     trip_id: str
     nodes: tuple[MatchedNode, ...]
     stop_ids: tuple[str, ...]  # ids of all stops of the trip, in stop_sequence order
+    reference_nodes: tuple[int | None, ...]  # geo.osm node of every stop, aligned with stop_ids
 
 
 @dataclass(frozen=True)
@@ -59,6 +62,14 @@ class GeneratedShape:
                 for i, pt in enumerate(self.points)
             ),
         )
+
+    def legs(self) -> Iterator[tuple[Point, Point]]:
+        """Yields the matched vertices of every pair of consecutive stops."""
+        for (_, from_vertex), (_, to_vertex) in pairwise(self.stop_vertices):
+            yield self.points[from_vertex], self.points[to_vertex]
+
+    def encode_polyline(self) -> str:
+        return polyline.encode([(pt.lat, pt.lon) for pt in self.points], 5)
 
     def project_stops(self, stop_coords: Sequence[tuple[float, float]]) -> dict[int, float]:
         """Calculates shape_dist_traveled of every stop by projecting its location onto
