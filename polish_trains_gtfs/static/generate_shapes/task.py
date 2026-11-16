@@ -86,14 +86,9 @@ class GenerateShapes(Task):
         skipped_detour = list[str]()
         detour_polylines = dict[str, str]()
         with r.db.transaction():
-            for shape_id, (nodes, trips) in enumerate(grouped_trips.items()):
-                if (shape_id + 1) % 50 == 0:
-                    self.logger.debug(
-                        "Generated %d / %d (%.2f %%) shapes",
-                        shape_id,
-                        len(grouped_trips),
-                        100 * shape_id / len(grouped_trips),
-                    )
+            for generated, (nodes, trips) in enumerate(grouped_trips.items()):
+                if generated and generated % 50 == 0:
+                    self.logger.info("Generated %d/%d shapes", generated, len(grouped_trips))
                 shape = generator.generate(nodes)
                 if self.should_check_detours() and self.has_detour(generator, shape, trips[0]):
                     trip_ids = [t.trip_id for t in trips]
