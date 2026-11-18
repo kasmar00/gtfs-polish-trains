@@ -35,8 +35,9 @@ type AffectedTrain struct {
 
 func FetchDisruptions(ctx context.Context, apikey string, client http2.Doer, dateFrom, dateTo time2.Date) (d *Disruptions, err error) {
 	query := url.Values{
-		"dateFrom": {dateFrom.String()},
-		"dateTo":   {dateTo.String()},
+		"dateFrom":        {dateFrom.String()},
+		"dateTo":          {dateTo.String()},
+		"carriersExclude": {"WKD"},
 	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", "https://pdp-api.plk-sa.pl/api/v1/disruptions/shortened", nil)

@@ -21,6 +21,7 @@ import (
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/schedules"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/source"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/client"
+	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/metrics"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/secret"
 )
 
@@ -51,6 +52,10 @@ func main() {
 	initJsonOutput()
 	initClientPool()
 	defer clientPool.Close()
+
+	if *flagLoop != 0 {
+		metrics.InitializePrometheusServer()
+	}
 
 	slog.Info("Loading static schedules")
 	static, err := schedules.LoadGTFSFromPath(*flagGTFS)
@@ -89,6 +94,7 @@ func main() {
 			} else {
 				b.EndRun(backoff.Success)
 				slog.Info("Feed updated successfully", "facts", totalFacts, "stats", stats)
+				metrics.RecordMatchStats(stats.Matched, stats.Unmatched, stats.OutsideFeedDates)
 			}
 		}
 	}
