@@ -175,13 +175,13 @@ func LoadGTFSFeedDates(feedInfo io.Reader) (d FeedDates, err error) {
 	}
 	// feed_start_date is the first "full" date, but we also want to match trips
 	// starting on the previous day. They are included in the GTFS.
-	d.Start = time2.Today().Previous()
+	d.Start = d.Start.Previous()
 
 	err = d.End.UnmarshalText([]byte(row["feed_end_date"]))
 	if err != nil {
 		return FeedDates{}, ErrGTFSInvalidValue{"feed_info.txt", "feed_end_date", 2, err}
 	}
-	d.End = time2.Today().Next()
+	d.End = time2.Today().Next().Next()
 
 	return
 }

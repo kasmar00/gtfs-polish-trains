@@ -4,7 +4,6 @@
 package http2
 
 import (
-	// "encoding/json/v2"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -53,6 +52,5 @@ func GetJSON[T any](client Doer, req *http.Request) (content *T, err error) {
 
 	dec := json.NewDecoder(resp.Body)
 	err = dec.Decode(&content)
-	// err = json.UnmarshalRead(resp.Body, &content)
 	return
 }
