@@ -23,18 +23,20 @@ import (
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/client"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/metrics"
 	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/secret"
+	"github.com/MKuranowski/PolishTrainsGTFS/polish_trains_gtfs/realtime/util/time2"
 )
 
 var (
-	flagAlerts      = flag.Bool("alerts", false, "include disruptions (alerts)")
-	flagAlternative = flag.Duration("alternative", 20*time.Minute, "when non-zero, fetch fresh schedules from API")
-	flagClients     = flag.String("clients", "", "path to JSON client configuration file")
-	flagGTFS        = flag.String("gtfs", "polish_trains.zip", "path to GTFS Schedule feed")
-	flagLoop        = flag.Duration("loop", 0, "when non-zero, update the feed continuously with the given period")
-	flagOutput      = flag.String("output", "polish_trains.pb", "path to output .pb file")
-	flagReadable    = flag.Bool("readable", false, "dump output in human-readable format")
-	flagUpdates     = flag.Bool("updates", true, "include operations (trip updates)")
-	flagVerbose     = flag.Bool("verbose", false, "show DEBUG logging")
+	flagAlerts          = flag.Bool("alerts", false, "include disruptions (alerts)")
+	flagAlternative     = flag.Duration("alternative", 20*time.Minute, "when non-zero, fetch fresh schedules from API")
+	flagClients         = flag.String("clients", "", "path to JSON client configuration file")
+	flagGTFS            = flag.String("gtfs", "polish_trains.zip", "path to GTFS Schedule feed")
+	flagICAnnouncements = flag.Bool("ic-announcements", false, "include PKP Intercity announcements (alerts)")
+	flagLoop            = flag.Duration("loop", 0, "when non-zero, update the feed continuously with the given period")
+	flagOutput          = flag.String("output", "polish_trains.pb", "path to output .pb file")
+	flagReadable        = flag.Bool("readable", false, "dump output in human-readable format")
+	flagUpdates         = flag.Bool("updates", true, "include operations (trip updates)")
+	flagVerbose         = flag.Bool("verbose", false, "show DEBUG logging")
 )
 
 var jsonOutput = ""
@@ -43,8 +45,8 @@ var clientPool *client.Pool
 
 func main() {
 	flag.Parse()
-	if !*flagAlerts && !*flagUpdates {
-		log.Fatal("At least one of -alerts or -updates must be enabled")
+	if !*flagAlerts && !*flagICAnnouncements && !*flagUpdates {
+		log.Fatal("At least one of -alerts, -ic-announcements or -updates must be enabled")
 	}
 	if *flagVerbose {
 		slog.SetLogLoggerLevel(slog.LevelDebug)
@@ -144,7 +146,33 @@ func fetch(static *schedules.Package, client *client.Client) (*fact.Container, m
 		}
 	}
 
+	if *flagICAnnouncements {
+		if facts == nil {
+			facts = &fact.Container{Schema: fact.Schema, Timestamp: time.Now().In(time2.PolishTimezone)}
+		}
+		facts.Alerts = append(facts.Alerts, fetchICAnnouncements(static)...)
+	}
+
 	return facts, stats, nil
+}
+
+// fetchICAnnouncements returns alerts from PKP Intercity announcements.
+// Announcements are supplementary, so failure to fetch them only results in a warning.
+func fetchICAnnouncements(static *schedules.Package) []*fact.Alert {
+	var stats match.Stats
+
+	slog.Debug("Fetching PKP Intercity announcements")
+	real, err := source.FetchIntercityAnnouncements(context.Background(), http.DefaultClient)
+	if err != nil {
+		slog.Warn("Failed to fetch PKP Intercity announcements", "error", err)
+		return nil
+	}
+	slog.Debug("Fetched PKP Intercity announcements", "items", len(real))
+
+	alerts := match.IntercityAnnouncements(real, static, &stats)
+	slog.Debug("Parsed PKP Intercity announcements", "facts", len(alerts), "stats", stats)
+
+	return alerts
 }
 
 func fetchAlerts(static *schedules.Package, client *client.Client) (*fact.Container, match.Stats, error) {
