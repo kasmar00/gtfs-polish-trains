@@ -35,6 +35,7 @@ class ExternalPlatform(TypedDict):
     track: str
     location: list[float] | None  # [lon, lat]
     exact_location: bool
+    single_track_platform: bool
 
 
 FAKE_PLATFORMS = {"", "BUS", "WAYPOINT"}
@@ -181,11 +182,15 @@ class LoadStations(Task):
                 station_slug,
             )
         external_candidates = self.external_platforms.get(station_slug, [])
+        single_platform_station = (
+            len({x["platform"] for x in external_candidates}) == 1
+            and len({x.platform for x in to_move}) == 1
+        )
         for (platform, track), trips in to_move.items():
             if platform in FAKE_PLATFORMS:
                 self.move_departures(db, f"{station.id}_FALLBACK", trips)
             else:
-                lat, lon, accessible = self.locate_platform(
+                lat, lon, accessible, single_sided = self.locate_platform(
                     station, external_candidates, platform, track
                 )
                 db_platform = Stop(
@@ -196,7 +201,9 @@ class LoadStations(Task):
                     wheelchair_boarding=accessible,
                     location_type=Stop.LocationType.STOP,
                     parent_station=station.id,
-                    platform_code=f"{platform}/{track}" if track else platform,
+                    platform_code=self.platform_code(
+                        single_sided, single_platform_station, platform, track
+                    ),
                     extra_fields_json=json.dumps({"country": station.country, "stop_access": "0"}),
                 )
                 db.create(db_platform)
@@ -208,21 +215,24 @@ class LoadStations(Task):
         external_candidates: list[ExternalPlatform],
         platform: str,
         track: str,
-    ) -> tuple[float, float, bool | None]:
+    ) -> tuple[float, float, bool | None, bool]:
         geo_platform = self.find_matching_platform(station, platform, track)
+
+        external_platform = self.find_external_platform(external_candidates, platform, track)
+
+        single_sided = False
+        if external_platform:
+            single_sided = external_platform["single_track_platform"]
 
         if geo_platform and geo_platform.track:
             self.location_sources["geo+track"] += 1
-            return geo_platform.lat, geo_platform.lon, geo_platform.accessible
+            return geo_platform.lat, geo_platform.lon, geo_platform.accessible, single_sided
 
-        external_platform = (
-            self.find_external_platform(external_candidates, platform, track) if track else None
-        )
         if external_platform:
             if external_platform["exact_location"] and external_platform["location"]:
                 self.location_sources["platforms.json"] += 1
                 location = external_platform["location"]
-                return location[1], location[0], station.accessible
+                return location[1], location[0], station.accessible, single_sided
             self.logger.debug(
                 "%s %s: skipping platforms.json location for platform %r track %r "
                 "(exact_location=%s)",
@@ -235,7 +245,7 @@ class LoadStations(Task):
 
         if geo_platform:
             self.location_sources["geo platform-only"] += 1
-            return geo_platform.lat, geo_platform.lon, geo_platform.accessible
+            return geo_platform.lat, geo_platform.lon, geo_platform.accessible, single_sided
 
         self.logger.debug(
             "%s %s: missing data for platform %r track %r",
@@ -245,7 +255,21 @@ class LoadStations(Task):
             track,
         )
         self.location_sources["station"] += 1
-        return station.lat, station.lon, station.accessible
+        return station.lat, station.lon, station.accessible, single_sided
+
+    def platform_code(
+        self, single_sided: bool, only_platform: bool, platform_number: str, track_number: str
+    ) -> str:
+        if single_sided or not track_number:
+            if only_platform:
+                return ""
+            else:
+                return platform_number
+        else:
+            if only_platform:
+                return f"t. {track_number}"
+            else:
+                return f"{platform_number} t. {track_number}"
 
     def find_external_platform(
         self,
