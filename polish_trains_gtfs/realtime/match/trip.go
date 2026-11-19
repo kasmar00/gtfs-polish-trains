@@ -35,7 +35,10 @@ func TripSelectors(real source.TrainID, static *schedules.Package) []fact.TripSe
 	if t == nil {
 		return nil
 	}
+	return tripSelectors(t)
+}
 
+func tripSelectors(t *schedules.Trip) []fact.TripSelector {
 	tripIDs := t.GetTripIDs()
 	selectors := make([]fact.TripSelector, len(tripIDs))
 	for i, tripID := range tripIDs {
