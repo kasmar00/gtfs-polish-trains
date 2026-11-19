@@ -19,6 +19,8 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+const Schema = "https://mkuran.pl/gtfs/polish_trains/live.schema.json"
+
 const (
 	Binary        = false
 	HumanReadable = true
@@ -121,10 +123,22 @@ func (c *Container) TotalFacts() int {
 	return len(c.Alerts) + len(c.TripUpdates)
 }
 
+// AlertEffect is the name of a GTFS-Realtime [gtfs.Alert_Effect] value.
+type AlertEffect string
+
+const (
+	EffectNoService          AlertEffect = "NO_SERVICE"
+	EffectSignificantDelays  AlertEffect = "SIGNIFICANT_DELAYS"
+	EffectOther              AlertEffect = "OTHER_EFFECT"
+	EffectAccessibilityIssue AlertEffect = "ACCESSIBILITY_ISSUE"
+)
+
 type Alert struct {
 	ID      string         `json:"id"`
 	Title   string         `json:"title"`
 	Message string         `json:"message"`
+	Effect  AlertEffect    `json:"effect,omitempty"`
+	URL     string         `json:"url,omitempty"`
 	Trips   []TripSelector `json:"trips"`
 }
 
@@ -139,6 +153,14 @@ func (a *Alert) AsGTFS() *gtfs.FeedEntity {
 
 	if a.Message != "" {
 		g.Alert.DescriptionText = translatedString(a.Message)
+	}
+
+	if effect, ok := gtfs.Alert_Effect_value[string(a.Effect)]; ok {
+		g.Alert.Effect = ptr(gtfs.Alert_Effect(effect))
+	}
+
+	if a.URL != "" {
+		g.Alert.Url = translatedString(a.URL)
 	}
 
 	g.Alert.InformedEntity = make([]*gtfs.EntitySelector, len(a.Trips))
